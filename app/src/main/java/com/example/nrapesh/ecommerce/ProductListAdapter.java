@@ -52,7 +52,7 @@ public class ProductListAdapter extends BaseAdapter {
         }
 
         holder.descriptionView.setText(listData.get(position).getDescription());
-        holder.priceView.setText(Integer.toString(listData.get(position).getPrice()));
+        holder.priceView.setText(Float.toString(listData.get(position).getPrice()));
         holder.imageView.setImageResource(R.drawable.michael_kors);
         holder.imageView.setScaleType(ScaleType.FIT_XY);
         return convertView;
