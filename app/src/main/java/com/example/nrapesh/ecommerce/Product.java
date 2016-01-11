@@ -133,6 +133,36 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
+
+    // add image url, seller, brand, category.
+
+    public Product(String description, float price) {
+        this.description = description;
+        this.price = price;
+    }
+
+    public Product(String name,
+                   String description,
+                   String retailer,
+                   String category,
+                   String color,
+                   String url,
+                   String imageUrl,
+                   float price,
+                   float discountPrice,
+                   boolean isOutOfStock) {
+        this.name = name;
+        this.description = description;
+        this.retailer = retailer;
+        this.category = category;
+        this.color = color;
+        this.url = url;
+        this.imageUrl = imageUrl;
+        this.price = price;
+        this.discountPrice = discountPrice;
+        this.isOutOfStock = isOutOfStock;
+    }
+
     public boolean getIsOutOfStock() {
         return isOutOfStock;
     }
