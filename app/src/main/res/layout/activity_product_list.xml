@@ -12,5 +12,6 @@
         android:id="@+id/product_list"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:dividerHeight="7dp" />
+        android:dividerHeight="7dp"
+        android:layout_gravity="left" />
 </RelativeLayout>
