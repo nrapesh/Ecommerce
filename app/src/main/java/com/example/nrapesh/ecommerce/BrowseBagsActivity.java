@@ -1,20 +1,17 @@
 package com.example.nrapesh.ecommerce;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ListView;
 import android.util.Log;
-
-import com.astuetz.PagerSlidingTabStrip;
+import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -27,8 +24,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductList extends AppCompatActivity {
+public class BrowseBagsActivity extends AppCompatActivity {
 
+    ArrayList<Product> results = new ArrayList<Product>();
+    // Progress Dialog
+    private ProgressDialog pDialog;
     // JSON Node names
     private static String TAG_SUCCESS = "success";
     private static String TAG_PRODUCTS = "product";
@@ -40,103 +40,46 @@ public class ProductList extends AppCompatActivity {
     private static String TAG_RETAILER = "retailer";
     private static String TAG_IMAGEURL = "image_url";
     private static String TAG_URL = "url";
+
     private int itemsLoaded=0;
-    private String url_all_products = "http://ec2-52-77-246-8.ap-southeast-1.compute.amazonaws.com/get_products.php";
+    private int category=0;
+    private String url_products = "http://ec2-52-77-246-8.ap-southeast-1.compute.amazonaws.com/get_products_by_category.php";
     ListView listview;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_browse_bags);
+        Bundle b = getIntent().getExtras();
+        category = b.getInt("category");
 
-        setContentView(R.layout.activity_product_list);
-
-        // Get the ViewPager and set it's PagerAdapter so that it can display items
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new TabFragmentPagerAdapter(getSupportFragmentManager()));
-
-        // Give the PagerSlidingTabStrip the ViewPager
-        PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-        // Attach the view pager to the tab strip
-        tabsStrip.setViewPager(viewPager);
-
-        /* new LoadAllProducts().execute("");
+        new LoadProducts().execute("");
 
 //        ArrayList image_details = getListData();
         final ListView lv1 = (ListView) findViewById(R.id.product_list);
 //        lv1.setAdapter(new ProductListAdapter(this, image_details));
-        lv1.setOnItemClickListener(new OnItemClickListener() {
+        lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 Object o = lv1.getItemAtPosition(position);
                 Product product = (Product) o;
-                Toast.makeText(ProductList.this, "Selected :" + " " + product, Toast.LENGTH_LONG).show();
+                Toast.makeText(BrowseBagsActivity.this, "Selected :" + " " + product, Toast.LENGTH_LONG).show();
             }
-        });*/
+        });
     }
 
-    public void browse_category(View v) {
-        Intent intent;
-        Bundle b = new Bundle();
-        switch(v.getId()) {
-            case R.id.browse_shoes: // R.id.textView2
-                intent = new Intent(this, BrowseBagsActivity.class);
-                b.putInt("category", PageFragment.SHOES); //Your id
-                intent.putExtras(b); //Put your id to your next Intent
-                break;
-            case R.id.browse_dresses: // R.id.textView3
-                intent = new Intent(this, BrowseBagsActivity.class);
-                b.putInt("category", PageFragment.CLOTHING); //Your id
-                intent.putExtras(b); //Put your id to your next Intent
-                break;
-            case R.id.browse_watches:
-                intent = new Intent(this, BrowseBagsActivity.class);
-                b.putInt("category", PageFragment.WATCHES); //Your id
-                intent.putExtras(b); //Put your id to your next Intent
-                break;
-            default:
-                intent = new Intent(this, BrowseBagsActivity.class);
-                b.putInt("category", PageFragment.HANDBAGS); //Your id
-                intent.putExtras(b); //Put your id to your next Intent
-        }
-        startActivity(intent);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_product_list, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    ArrayList<Product> results = new ArrayList<Product>();
-
-    private ArrayList getListData() {
-
-        return results;
-    }
-
-    // Progress Dialog
-    private ProgressDialog pDialog;
+    //@Override
+    //public void onBackPressed()
+    //{
+    //    moveTaskToBack(true);
+    //    return;
+    //}
 
     /**
      * Background Async Task to Load all product by making HTTP Request
      * */
-    class LoadAllProducts extends AsyncTask<String, String, String> {
+    class LoadProducts extends AsyncTask<String, String, String> {
 
         /**
          * Before starting background thread Show Progress Dialog
@@ -144,7 +87,7 @@ public class ProductList extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(ProductList.this);
+            pDialog = new ProgressDialog(BrowseBagsActivity.this);
             pDialog.setMessage("Loading products. Please wait...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
@@ -159,8 +102,10 @@ public class ProductList extends AppCompatActivity {
 
             List<NameValuePair> params = new ArrayList<NameValuePair>();
             // getting JSON string from URL
+            NameValuePair n_category = new BasicNameValuePair("category", String.valueOf(category));
+            params.add(n_category);
             JSONParser jParser = new JSONParser();
-            JSONObject json = jParser.makeHttpRequest(url_all_products, "GET", params);
+            JSONObject json = jParser.makeHttpRequest(url_products, "GET", params);
             // products JSONArray
             JSONArray products = null;
 
@@ -230,11 +175,11 @@ public class ProductList extends AppCompatActivity {
          * **/
         protected void onPostExecute(String file_url) {
             // dismiss the dialog after getting all products
-            /*pDialog.dismiss();
+            pDialog.dismiss();
             listview = (ListView) findViewById(R.id.product_list);
-            listview.setAdapter(new ProductListAdapter(ProductList.this, results));
+            listview.setAdapter(new ProductListAdapter(BrowseBagsActivity.this, results));
             // Create an OnScrollListener
-            listview.setOnScrollListener(new OnScrollListener() {
+            listview.setOnScrollListener(new AbsListView.OnScrollListener() {
 
                 @Override
                 public void onScrollStateChanged(AbsListView view,
@@ -258,7 +203,7 @@ public class ProductList extends AppCompatActivity {
 
                 }
 
-            });*/
+            });
         }
 
         private class LoadMoreDataTask extends AsyncTask<Void, Void, Void> {
@@ -266,7 +211,7 @@ public class ProductList extends AppCompatActivity {
             protected void onPreExecute() {
                 super.onPreExecute();
                 // Create a progressdialog
-                pDialog = new ProgressDialog(ProductList.this);
+                pDialog = new ProgressDialog(BrowseBagsActivity.this);
                 // Set progressdialog title
                 pDialog.setTitle("Load More Products");
                 // Set progressdialog message
@@ -281,9 +226,11 @@ public class ProductList extends AppCompatActivity {
                 List<NameValuePair> params = new ArrayList<NameValuePair>();
                 // getting JSON string from URL
                 JSONParser jParser = new JSONParser();
-                NameValuePair n = new BasicNameValuePair("start", Integer.toString(itemsLoaded));
-                params.add(n);
-                JSONObject json = jParser.makeHttpRequest(url_all_products, "GET", params);
+                NameValuePair n_start = new BasicNameValuePair("start", Integer.toString(itemsLoaded));
+                params.add(n_start);
+                NameValuePair n_category = new BasicNameValuePair("category", String.valueOf(category));
+                params.add(n_category);
+                JSONObject json = jParser.makeHttpRequest(url_products, "GET", params);
                 // products JSONArray
                 JSONArray products = null;
 
@@ -353,7 +300,7 @@ public class ProductList extends AppCompatActivity {
                 // Locate listview last item
                 int position = listview.getLastVisiblePosition();
                 // Binds the Adapter to the ListView
-                listview.setAdapter(new ProductListAdapter(ProductList.this, results));
+                listview.setAdapter(new ProductListAdapter(BrowseBagsActivity.this, results));
                 // Show the latest retrived results on the top
                 listview.setSelectionFromTop(position, 0);
                 // Close the progressdialog
