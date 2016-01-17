@@ -81,9 +81,9 @@ public class LauncherActivity extends AppCompatActivity {
 
         // If the access token is available already assign it.
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
-//        if (accessToken != null) {
-//            startProductListActivity();
-//        }
+        if (accessToken != null) {
+            startProductListActivity();
+        }
 
         LoginButton facebookButton = (LoginButton) findViewById(R.id.facebook_login_button);
         facebookButton.setReadPermissions(Arrays.asList(

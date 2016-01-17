@@ -6,6 +6,8 @@
     android:id="@+id/tab1"
     android:orientation="vertical">
 
+    <include layout="@layout/titlebar"/>
+
     <com.astuetz.PagerSlidingTabStrip
         android:id="@+id/tabs"
         app:pstsShouldExpand="true"
