@@ -1,8 +1,8 @@
 package com.example.nrapesh.ecommerce;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -18,7 +18,7 @@ import com.facebook.login.widget.LoginButton;
 import java.util.Arrays;
 
 
-public class LauncherActivity extends Activity {
+public class LauncherActivity extends AppCompatActivity {
 
     private CallbackManager facebookCallManager;
 

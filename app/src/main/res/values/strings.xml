@@ -11,4 +11,8 @@
 
     // Facebook integration
     <string name="facebook_app_id">677438335731034</string>
+
+    // Launcher page
+    <string name="sign_in">Sign In with Email</string>
+    <string name="create_account">Create Account</string>
 </resources>

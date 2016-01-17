@@ -8,6 +8,7 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     android:background="#CC000000"
+
     tools:context="com.example.nrapesh.ecommerce.LauncherActivity">
 
     <LinearLayout
@@ -28,8 +29,9 @@
             android:paddingBottom="0dp"
             android:textSize="50dp"
             android:layout_weight="6"
-            android:layout_marginBottom="0dp"
+            android:layout_marginBottom="-45dp"
             android:text="@string/app_name"
+            android:textColor="#FFFFFF"
             />
 
         <TextView
@@ -40,8 +42,9 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:layout_weight="4"
-            android:layout_marginTop="-90dp"
+            android:layout_marginTop="-45dp"
             android:text="@string/app_description"
+            android:textColor="#FFFFFF"
             />
     </LinearLayout>
 
@@ -52,14 +55,43 @@
         android:gravity="center"
         android:layout_weight="4"
         android:orientation="vertical">
+
         <com.facebook.login.widget.LoginButton
             android:id="@+id/facebook_login_button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="30dp"
             android:layout_centerInParent="true"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:textSize="15dp"
             />
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/sign_in"
+                android:textAllCaps="false"
+                android:background="#00000000"
+                android:textColor="@drawable/login_create_button_text_color"
+                android:layout_weight="1"
+                />
+            <Button
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/create_account"
+                android:textAllCaps="false"
+                android:background="#00000000"
+                android:textColor="@drawable/login_create_button_text_color"
+                android:layout_weight="1"
+
+                />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
