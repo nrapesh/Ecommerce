@@ -15,7 +15,9 @@
 
         <activity android:name=".ProductList" />
         <activity android:name=".BrowseBagsActivity"/>
-        <activity android:name=".LauncherActivity">
+        <activity android:name=".LauncherActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

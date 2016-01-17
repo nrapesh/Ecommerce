@@ -1,8 +1,8 @@
 package com.example.nrapesh.ecommerce;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -18,7 +18,7 @@ import com.facebook.login.widget.LoginButton;
 import java.util.Arrays;
 
 
-public class LauncherActivity extends AppCompatActivity {
+public class LauncherActivity extends Activity {
 
     private CallbackManager facebookCallManager;
 
@@ -81,9 +81,9 @@ public class LauncherActivity extends AppCompatActivity {
 
         // If the access token is available already assign it.
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        if (accessToken != null) {
-            startProductListActivity();
-        }
+//        if (accessToken != null) {
+//            startProductListActivity();
+//        }
 
         LoginButton facebookButton = (LoginButton) findViewById(R.id.facebook_login_button);
         facebookButton.setReadPermissions(Arrays.asList(
