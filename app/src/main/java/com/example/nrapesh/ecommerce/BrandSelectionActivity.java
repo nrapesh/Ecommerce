@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
@@ -60,7 +61,9 @@ public class BrandSelectionActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle("SELECT BRAND");
+        TextView v = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        v.setGravity(Gravity.LEFT | Gravity.CENTER);
+        v.setText("SELECT BRAND");
 
         new LoadBrands().execute("");
 
