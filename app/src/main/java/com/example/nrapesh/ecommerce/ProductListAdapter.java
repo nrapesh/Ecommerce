@@ -13,8 +13,9 @@ import android.widget.ImageView.ScaleType;
 import java.util.ArrayList;
 
 /**
- * Adapter to manager list of products.
+ * Adapter to manage list of products.
  */
+
 public class ProductListAdapter extends BaseAdapter {
     private ArrayList<Product> listData;
     private LayoutInflater layoutInflater;

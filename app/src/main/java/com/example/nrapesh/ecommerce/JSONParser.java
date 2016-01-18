@@ -42,6 +42,7 @@ public class JSONParser {
                                       List<NameValuePair> params) {
 
         // Making HTTP request
+        Log.d("Url:mk ", url);
         try {
 
             // check for request method
@@ -61,6 +62,7 @@ public class JSONParser {
                 DefaultHttpClient httpClient = new DefaultHttpClient();
                 String paramString = URLEncodedUtils.format(params, "utf-8");
                 url += "?" + paramString;
+                Log.d("URL: new : ", url);
                 HttpGet httpGet = new HttpGet(url);
 
                 HttpResponse httpResponse = httpClient.execute(httpGet);
@@ -92,6 +94,7 @@ public class JSONParser {
 
         // try parse the string to a JSON object
         try {
+            Log.d("JSON: " , json.toString());
             jObj = new JSONObject(json);
         } catch (JSONException e) {
             Log.e("JSON Parser", "Error parsing data " + e.toString());

@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/browse_bags"
-        android:text="BAGS"
+        android:text="HANDBAGS"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.2"
@@ -38,8 +38,8 @@
         android:id="@+id/divider2"
         style="@style/Divider" />
     <TextView
-        android:id="@+id/browse_dresses"
-        android:text="DRESSES"
+        android:id="@+id/browse_clothing"
+        android:text="CLOTHING"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.2"
@@ -64,9 +64,11 @@
         android:clickable="true"
         android:onClick="browse_category"
         android:gravity="center" />
+
     <View
         android:id="@+id/divider4"
         style="@style/Divider" />
+
     <TextView
         android:id="@+id/browse_brands"
         android:text="BY BRAND"
@@ -76,8 +78,9 @@
         android:textStyle="bold"
         android:typeface="sans"
         android:textSize="25dp"
+        android:clickable="true"
+        android:onClick="browse_category"
         android:gravity="center" />
-
 
     <!--<ListView
         android:id="@+id/browse_categories"

@@ -11,8 +11,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
 
@@ -74,32 +78,96 @@ public class ProductList extends AppCompatActivity {
         });*/
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();  // Always call the superclass method first
+
+        // Activity being restarted from stopped state
+    }
+
     public void browse_category(View v) {
         Intent intent;
         Bundle b = new Bundle();
         switch(v.getId()) {
             case R.id.browse_shoes: // R.id.textView2
-                intent = new Intent(this, BrowseBagsActivity.class);
+                intent = new Intent(this, BrowseShoesActivity.class);
                 b.putInt("category", PageFragment.SHOES); //Your id
                 intent.putExtras(b); //Put your id to your next Intent
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 break;
-            case R.id.browse_dresses: // R.id.textView3
-                intent = new Intent(this, BrowseBagsActivity.class);
+            case R.id.browse_clothing: // R.id.textView3
+                intent = new Intent(this, BrowseClothingActivity.class);
                 b.putInt("category", PageFragment.CLOTHING); //Your id
                 intent.putExtras(b); //Put your id to your next Intent
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 break;
             case R.id.browse_watches:
-                intent = new Intent(this, BrowseBagsActivity.class);
+                intent = new Intent(this, BrowseWatchesActivity.class);
                 b.putInt("category", PageFragment.WATCHES); //Your id
                 intent.putExtras(b); //Put your id to your next Intent
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                break;
+            case R.id.browse_brands:
+                intent = new Intent(this, BrandSelectionActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 break;
             default:
                 intent = new Intent(this, BrowseBagsActivity.class);
                 b.putInt("category", PageFragment.HANDBAGS); //Your id
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 intent.putExtras(b); //Put your id to your next Intent
         }
         startActivity(intent);
     }
+
+    /*public void browse_brands(View v) {
+        LinearLayout layout = (LinearLayout) findViewById(R.id.brands);
+        TextView mk = (TextView) findViewById(R.id.mk);
+        TextView bags = (TextView) findViewById(R.id.browse_bags);
+        TextView shoes = (TextView) findViewById(R.id.browse_shoes);
+        TextView clothing = (TextView) findViewById(R.id.browse_clothing);
+        TextView watches = (TextView) findViewById(R.id.browse_watches);
+        if (mk.isShown())
+        {
+            Animation brands_slide_up = AnimationUtils.loadAnimation(getApplicationContext(),
+                    R.anim.brands_slide_up);
+            Animation cat_slide_up = AnimationUtils.loadAnimation(getApplicationContext(),
+                    R.anim.cat_slide_up);
+            mk.startAnimation(brands_slide_up);
+            bags.startAnimation(cat_slide_up);
+            shoes.startAnimation(cat_slide_up);
+            clothing.startAnimation(cat_slide_up);
+            watches.startAnimation(cat_slide_up);
+
+            mk.setVisibility(View.GONE);
+            layout.setVisibility(View.GONE);
+            bags.setVisibility(View.VISIBLE);
+            shoes.setVisibility(View.VISIBLE);
+            clothing.setVisibility(View.VISIBLE);
+            watches.setVisibility(View.VISIBLE);
+
+        }
+        else
+        {
+            Animation brands_slide_down = AnimationUtils.loadAnimation(getApplicationContext(),
+                    R.anim.brands_slide_down);
+            Animation cat_slide_down = AnimationUtils.loadAnimation(getApplicationContext(),
+                    R.anim.cat_slide_down);
+            mk.startAnimation(brands_slide_down);
+            bags.startAnimation(cat_slide_down);
+            shoes.startAnimation(cat_slide_down);
+            clothing.startAnimation(cat_slide_down);
+            watches.startAnimation(cat_slide_down);
+
+            layout.setVisibility(View.VISIBLE);
+            mk.setVisibility(View.VISIBLE);
+            bags.setVisibility(View.GONE);
+            shoes.setVisibility(View.GONE);
+            clothing.setVisibility(View.GONE);
+            watches.setVisibility(View.GONE);
+
+        }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

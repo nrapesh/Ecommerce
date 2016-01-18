@@ -1,15 +1,16 @@
 package com.example.nrapesh.ecommerce;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -25,13 +26,14 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
 /**
- * Created by VineetR on 12-01-2016.
+ * Created by VineetR on 14-01-2016.
  */
-// In this case, the fragment displays simple text based on the page
-public class FeaturedFragment extends Fragment {
+public class BrandProductsActivity extends AppCompatActivity {
 
+    ArrayList<Product> results = new ArrayList<Product>();
+    // Progress Dialog
+    private ProgressDialog pDialog;
     // JSON Node names
     private static String TAG_SUCCESS = "success";
     private static String TAG_PRODUCTS = "product";
@@ -43,64 +45,67 @@ public class FeaturedFragment extends Fragment {
     private static String TAG_RETAILER = "retailer";
     private static String TAG_IMAGEURL = "image_url";
     private static String TAG_URL = "url";
+
     private int itemsLoaded=0;
-    private String url_featured_products = "http://ec2-52-77-246-8.ap-southeast-1.compute.amazonaws.com/get_featured_products.php";
-    private String url_sale_products = "http://ec2-52-77-246-8.ap-southeast-1.compute.amazonaws.com/get_sale_products.php";
-    private String query_url;
+    private String brand="";
+//    private String url_products = "http://ec2-52-77-246-8.ap-southeast-1.compute.amazonaws.com/get_products_by_brand.php";
+    private String url_products_by_brand = "http://ec2-52-77-246-8.ap-southeast-1.compute.amazonaws.com/get_products_by_brand.php";
     ListView listview;
 
-    public static final String ARG_TAB = "ARG_TAB";
-    private View view;
-    private int mTab;
-
-    public static FeaturedFragment newInstance(int tab) {
-        Bundle args = new Bundle();
-        args.putInt(ARG_TAB, tab);
-        FeaturedFragment fragment = new FeaturedFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTab = getArguments().getInt(ARG_TAB);
-        query_url = url_featured_products;
-        if (mTab == 2) query_url = url_sale_products;
-    }
+        setContentView(R.layout.activity_browse);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        Bundle b = getIntent().getExtras();
+        brand = b.getString("brand");
+        actionBar.setTitle(brand.toUpperCase());
 
-    // Inflate the fragment layout we defined above for this fragment
-    // Set the associated text for the title
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.products_list, container, false);
-        new LoadAllProducts().execute("");
+        new LoadProducts().execute("");
 
 //        ArrayList image_details = getListData();
-        final ListView lv1 = (ListView) view.findViewById(R.id.product_list);
+        final ListView lv1 = (ListView) findViewById(R.id.product_list);
 //        lv1.setAdapter(new ProductListAdapter(this, image_details));
         lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-                Object o = lv1.getItemAtPosition(position);
-                Product product = (Product) o;
-                Toast.makeText(FeaturedFragment.this.getContext(), "Selected :" + " " + product, Toast.LENGTH_LONG).show();
+        //        Object o = lv1.getItemAtPosition(position);
+        //        Product product = (Product) o;
+        //        Toast.makeText(BrandProductsActivity.this, "Selected :" + " " + product, Toast.LENGTH_LONG).show();
             }
         });
-        //TextView tvTitle = (TextView) view.findViewById(R.id.tvTitle);
-        //tvTitle.setText("Fragment Featured");
-        return view;
     }
 
-    ArrayList<Product> results = new ArrayList<Product>();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; go home
+                Intent intent = new Intent(this, BrandSelectionActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
 
-    // Progress Dialog
-    private ProgressDialog pDialog;
+                // another approach
+                //this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    //@Override
+    //public void onBackPressed()
+    //{
+    //    moveTaskToBack(true);
+    //    return;
+    //}
 
     /**
      * Background Async Task to Load all product by making HTTP Request
      * */
-    class LoadAllProducts extends AsyncTask<String, String, String> {
+    class LoadProducts extends AsyncTask<String, String, String> {
 
         /**
          * Before starting background thread Show Progress Dialog
@@ -108,7 +113,7 @@ public class FeaturedFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(FeaturedFragment.this.getContext());
+            pDialog = new ProgressDialog(BrandProductsActivity.this);
             pDialog.setMessage("Loading products. Please wait...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
@@ -123,13 +128,18 @@ public class FeaturedFragment extends Fragment {
 
             List<NameValuePair> params = new ArrayList<NameValuePair>();
             // getting JSON string from URL
+            NameValuePair n_brand = new BasicNameValuePair("brand", brand);
+            params.add(n_brand);
             JSONParser jParser = new JSONParser();
-            JSONObject json = jParser.makeHttpRequest(query_url, "GET", params);
+            Log.d("Url : " , url_products_by_brand);
+            JSONObject json = jParser.makeHttpRequest(url_products_by_brand, "GET", params);
             // products JSONArray
             JSONArray products = null;
 
             // Check your log cat for JSON reponse
+            Log.d("Url : " , url_products_by_brand);
             Log.d("All Products: ", json.toString());
+            Log.d("Url : " , url_products_by_brand);
 
             try {
                 // Checking for SUCCESS TAG
@@ -190,14 +200,15 @@ public class FeaturedFragment extends Fragment {
             return null;
         }
 
+
         /**
          * After completing background task Dismiss the progress dialog
          * **/
         protected void onPostExecute(String file_url) {
             // dismiss the dialog after getting all products
             pDialog.dismiss();
-            listview = (ListView) view.findViewById(R.id.product_list);
-            listview.setAdapter(new ProductListAdapter(FeaturedFragment.this.getContext(), results));
+            listview = (ListView) findViewById(R.id.product_list);
+            listview.setAdapter(new ProductListAdapter(BrandProductsActivity.this, results));
             // Create an OnScrollListener
             listview.setOnScrollListener(new AbsListView.OnScrollListener() {
 
@@ -225,12 +236,13 @@ public class FeaturedFragment extends Fragment {
 
             });
         }
+
         private class LoadMoreDataTask extends AsyncTask<Void, Void, Void> {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
                 // Create a progressdialog
-                pDialog = new ProgressDialog(FeaturedFragment.this.getContext());
+                pDialog = new ProgressDialog(BrandProductsActivity.this);
                 // Set progressdialog title
                 pDialog.setTitle("Load More Products");
                 // Set progressdialog message
@@ -245,9 +257,12 @@ public class FeaturedFragment extends Fragment {
                 List<NameValuePair> params = new ArrayList<NameValuePair>();
                 // getting JSON string from URL
                 JSONParser jParser = new JSONParser();
-                NameValuePair n = new BasicNameValuePair("start", Integer.toString(itemsLoaded));
-                params.add(n);
-                JSONObject json = jParser.makeHttpRequest(query_url, "GET", params);
+                NameValuePair n_start = new BasicNameValuePair("start", Integer.toString(itemsLoaded));
+                params.add(n_start);
+                NameValuePair n_brand = new BasicNameValuePair("brand", String.valueOf(brand));
+                params.add(n_brand);
+                Log.d("URL: " , url_products_by_brand);
+                JSONObject json = jParser.makeHttpRequest(url_products_by_brand, "GET", params);
                 // products JSONArray
                 JSONArray products = null;
 
@@ -318,7 +333,7 @@ public class FeaturedFragment extends Fragment {
                 // Locate listview last item
                 int position = listview.getLastVisiblePosition();
                 // Binds the Adapter to the ListView
-                listview.setAdapter(new ProductListAdapter(FeaturedFragment.this.getContext(), results));
+                listview.setAdapter(new ProductListAdapter(BrandProductsActivity.this, results));
                 // Show the latest retrived results on the top
                 listview.setSelectionFromTop(position, 0);
                 // Close the progressdialog
