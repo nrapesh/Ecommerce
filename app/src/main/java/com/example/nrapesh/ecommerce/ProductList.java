@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,8 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-
-import com.astuetz.PagerSlidingTabStrip;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -45,6 +44,7 @@ public class ProductList extends AppCompatActivity {
     private String url_all_products = "http://ec2-52-77-246-8.ap-southeast-1.compute.amazonaws.com/get_products.php";
     ListView listview;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,15 +54,15 @@ public class ProductList extends AppCompatActivity {
         // Set a toolbar to replace the action bar.
         Toolbar toolbar = (Toolbar) findViewById(R.id.titlebar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(new TabFragmentPagerAdapter(getSupportFragmentManager()));
 
-        // Give the PagerSlidingTabStrip the ViewPager
-        PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-        // Attach the view pager to the tab strip
-        tabsStrip.setViewPager(viewPager);
+        // Give the TabLayout the ViewPager
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout.setupWithViewPager(viewPager);
 
         /* new LoadAllProducts().execute("");
 

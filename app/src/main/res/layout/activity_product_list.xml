@@ -9,22 +9,25 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <include layout="@layout/titlebar"/>
+        <include layout="@layout/titlebar"/>
 
-    <com.astuetz.PagerSlidingTabStrip
-        android:id="@+id/tabs"
-        app:pstsShouldExpand="true"
-        app:pstsTextAllCaps="true"
-        android:layout_width="match_parent"
-        android:layout_height="48dp" />
+        <android.support.design.widget.TabLayout
+            android:id="@+id/sliding_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            app:tabIndicatorColor="@color/primaryTextLight"
+            app:tabMode="fixed" />
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white" />
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
     </LinearLayout>
 
     <android.support.design.widget.NavigationView
@@ -33,7 +36,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/drawer_header"
-        app:menu="@menu/drawer_items" />
+        app:menu="@menu/drawer_items"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"/>
 
 </android.support.v4.widget.DrawerLayout>
 

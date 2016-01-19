@@ -10,13 +10,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
@@ -67,9 +65,9 @@ public class BrowseActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         Bundle b = getIntent().getExtras();
         category = b.getInt("category");
-        TextView v = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        v.setGravity(Gravity.LEFT | Gravity.CENTER);
-        v.setText(PageFragment.M_CATEGORIES[category - 1]);
+//        TextView v = (TextView) toolbar.findViewById(R.id.toolbar_title);
+//        v.setGravity(Gravity.LEFT | Gravity.CENTER);
+//        v.setText(PageFragment.M_CATEGORIES[category - 1]);
 
         new LoadProducts().execute("");
 

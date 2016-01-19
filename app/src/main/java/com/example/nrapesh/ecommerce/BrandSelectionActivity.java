@@ -2,33 +2,24 @@ package com.example.nrapesh.ecommerce;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 /**
@@ -61,9 +52,9 @@ public class BrandSelectionActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        TextView v = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        v.setGravity(Gravity.LEFT | Gravity.CENTER);
-        v.setText("SELECT BRAND");
+//        TextView v = (TextView) toolbar.findViewById(R.id.toolbar_title);
+//        v.setGravity(Gravity.LEFT | Gravity.CENTER);
+//        v.setText("SELECT BRAND");
 
         new LoadBrands().execute("");
 
