@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        
+
     <include layout="@layout/titlebar"/>
 
     <com.astuetz.PagerSlidingTabStrip
@@ -32,7 +32,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:menu="@menu/navigation_items" />
+        app:headerLayout="@layout/drawer_header"
+        app:menu="@menu/drawer_items" />
 
 </android.support.v4.widget.DrawerLayout>
 
