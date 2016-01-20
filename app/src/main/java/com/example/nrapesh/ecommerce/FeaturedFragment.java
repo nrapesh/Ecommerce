@@ -1,11 +1,10 @@
 package com.example.nrapesh.ecommerce;
 
-import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
@@ -51,6 +51,7 @@ public class FeaturedFragment extends Fragment {
 
     public static final String ARG_TAB = "ARG_TAB";
     private View view;
+    private ProgressBar progressBar;
     private int mTab;
 
     public static FeaturedFragment newInstance(int tab) {
@@ -74,10 +75,11 @@ public class FeaturedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.products_list, container, false);
+        final ListView lv1 = (ListView) view.findViewById(R.id.product_list);
+        progressBar = (ProgressBar) getActivity().findViewById(R.id.progressbar);
         new LoadAllProducts().execute("");
 
 //        ArrayList image_details = getListData();
-        final ListView lv1 = (ListView) view.findViewById(R.id.product_list);
 //        lv1.setAdapter(new ProductListAdapter(this, image_details));
         lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -94,8 +96,7 @@ public class FeaturedFragment extends Fragment {
 
     ArrayList<Product> results = new ArrayList<Product>();
 
-    // Progress Dialog
-    private ProgressDialog pDialog;
+
 
     /**
      * Background Async Task to Load all product by making HTTP Request
@@ -108,11 +109,7 @@ public class FeaturedFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(FeaturedFragment.this.getContext());
-            pDialog.setMessage("Loading products. Please wait...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(false);
-            pDialog.show();
+            progressBar.setVisibility(View.VISIBLE);
         }
 
         /**
@@ -195,7 +192,7 @@ public class FeaturedFragment extends Fragment {
          * **/
         protected void onPostExecute(String file_url) {
             // dismiss the dialog after getting all products
-            pDialog.dismiss();
+            progressBar.setVisibility(View.GONE);
             listview = (ListView) view.findViewById(R.id.product_list);
             listview.setAdapter(new ProductListAdapter(FeaturedFragment.this.getContext(), results));
             // Create an OnScrollListener
@@ -229,15 +226,7 @@ public class FeaturedFragment extends Fragment {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                // Create a progressdialog
-                pDialog = new ProgressDialog(FeaturedFragment.this.getContext());
-                // Set progressdialog title
-                pDialog.setTitle("Load More Products");
-                // Set progressdialog message
-                pDialog.setMessage("Loading more products. Please wait...");
-                pDialog.setIndeterminate(false);
-                // Show progressdialog
-                pDialog.show();
+                progressBar.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -322,7 +311,8 @@ public class FeaturedFragment extends Fragment {
                 // Show the latest retrived results on the top
                 listview.setSelectionFromTop(position, 0);
                 // Close the progressdialog
-                pDialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+
             }
         }
     }

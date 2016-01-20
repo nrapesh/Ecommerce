@@ -28,6 +28,20 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+            <ProgressBar
+                style="@android:style/Widget.ProgressBar.Small"
+                android:id="@+id/progressbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:visibility="gone"
+                android:gravity="center"
+                android:layout_gravity="center"/>
+        </LinearLayout>
     </LinearLayout>
 
     <android.support.design.widget.NavigationView
