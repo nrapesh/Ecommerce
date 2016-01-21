@@ -180,7 +180,7 @@ public class BrowseActivity extends AppCompatActivity {
                         Bitmap imageBitmap = null;
                         try {
                             Bitmap sourceImageBitmap = BitmapFactory.decodeStream((InputStream) new URL(imageUrl).getContent());
-                            imageBitmap = ImageUtil.cropTopBackgroud(sourceImageBitmap);
+                            imageBitmap = ImageUtil.widthAdjust(ImageUtil.cropTopBackgroud(sourceImageBitmap));
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -306,7 +306,7 @@ public class BrowseActivity extends AppCompatActivity {
                             Bitmap imageBitmap = null;
                             try {
                                 Bitmap sourceImageBitmap = BitmapFactory.decodeStream((InputStream) new URL(imageUrl).getContent());
-                                imageBitmap = ImageUtil.cropTopBackgroud(sourceImageBitmap);
+                                imageBitmap = ImageUtil.widthAdjust(ImageUtil.cropTopBackgroud(sourceImageBitmap));
 
                             } catch (Exception e) {
                                 e.printStackTrace();
