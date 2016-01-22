@@ -1,14 +1,12 @@
 package com.example.nrapesh.ecommerce;
 
-import android.content.Context;
-import android.net.Uri;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.ImageView.ScaleType;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -16,30 +14,73 @@ import java.util.ArrayList;
  * Adapter to manage list of products.
  */
 
-public class ProductListAdapter extends BaseAdapter {
-    private ArrayList<Product> listData;
-    private LayoutInflater layoutInflater;
+class ViewHolder extends RecyclerView.ViewHolder {
+    ImageView imageView;
+    TextView nameView;
+    TextView priceView;
+    TextView discountPriceView;
+    TextView retailerView;
 
-    public ProductListAdapter(Context aContext, ArrayList<Product> listData) {
+    protected ViewHolder(View itemLayoutView) {
+        super(itemLayoutView);
+        this.imageView = (ImageView) itemLayoutView.findViewById(R.id.image);
+        this.nameView = (TextView) itemLayoutView.findViewById(R.id.name);
+        this.priceView = (TextView) itemLayoutView.findViewById(R.id.price);
+        this.discountPriceView = (TextView) itemLayoutView.findViewById(R.id.discountPrice);
+        this.retailerView = (TextView) itemLayoutView.findViewById(R.id.retailer);
+    }
+
+}
+
+public class ProductListAdapter extends RecyclerView.Adapter<ViewHolder> {
+
+    private ArrayList<Product> listData;
+
+    public ProductListAdapter(ArrayList<Product> listData) {
         this.listData = listData;
-        layoutInflater = LayoutInflater.from(aContext);
     }
 
     @Override
-    public int getCount() {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View view = inflater.inflate(R.layout.basic_product_info, null);
+        ViewHolder viewHolder = new ViewHolder(view);
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.nameView.setText(listData.get(position).getName());
+        String priceText = "";
+        String discountPriceText = "";
+        Float price = listData.get(position).getPrice();
+        Float discountPrice = listData.get(position).getDiscountPrice();
+        if (discountPrice == null || discountPrice == 0 || discountPrice.equals(price))
+        {
+            priceText = "$" + Float.toString(price);
+        }
+        else
+        {
+            priceText = "Orig. $" + Float.toString(price);
+            discountPriceText = "Now $" + Float.toString(discountPrice);
+        }
+        holder.priceView.setText(priceText);
+        holder.discountPriceView.setText(discountPriceText);
+        String retailerString = listData.get(position).getRetailer().toUpperCase() + ", USA";
+        holder.retailerView.setText(retailerString);
+        //holder.imageView.setImageResource(R.drawable.michael_kors);
+        //holder.imageView.setImageURI(Uri.parse(listData.get(position).getImageUrl()));
+        holder.imageView.setImageBitmap(listData.get(position).getImageBitmap());
+        holder.imageView.setScaleType(ScaleType.FIT_XY);
+    }
+
+    @Override
+    public int getItemCount() {
         return listData.size();
     }
 
-    @Override
-    public Object getItem(int position) {
-        return listData.get(position);
-    }
 
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
+    /*
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
@@ -79,12 +120,5 @@ public class ProductListAdapter extends BaseAdapter {
         holder.imageView.setScaleType(ScaleType.FIT_XY);
         return convertView;
     }
-
-    static class ViewHolder {
-        ImageView imageView;
-        TextView nameView;
-        TextView priceView;
-        TextView discountPriceView;
-        TextView retailerView;
-    }
+    */
 }
