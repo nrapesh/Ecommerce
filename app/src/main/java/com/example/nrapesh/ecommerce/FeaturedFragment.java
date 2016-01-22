@@ -91,13 +91,14 @@ public class FeaturedFragment extends Fragment {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                if (!loading && mRecyclerView.getLayoutManager().getItemCount() <=
-                        (mRecyclerView.getLayoutManager().getItemCount()
-                                + 10)) {
+                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+                if (!loading && linearLayoutManager.getItemCount() <=
+                        (linearLayoutManager.findLastVisibleItemPosition() + 5)) {
+                    loading = true;
+
                     // End has been reached
                     // Do something
                     new LoadMoreDataTask().execute();
-                    loading = true;
                 }
             }
         });
