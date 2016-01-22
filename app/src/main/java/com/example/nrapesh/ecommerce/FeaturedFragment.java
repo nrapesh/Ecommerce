@@ -42,11 +42,13 @@ public class FeaturedFragment extends Fragment {
     private static String TAG_RETAILER = "retailer";
     private static String TAG_IMAGEURL = "image_url";
     private static String TAG_URL = "url";
-    private int itemsLoaded=0;
+    private int itemsLoaded = 0;
     private String url_featured_products = "http://ec2-52-77-246-8.ap-southeast-1.compute.amazonaws.com/get_featured_products.php";
     private String url_sale_products = "http://ec2-52-77-246-8.ap-southeast-1.compute.amazonaws.com/get_sale_products.php";
     private String query_url;
     ListView listview;
+
+    private boolean loading = false;
 
     public static final String ARG_TAB = "ARG_TAB";
     private View view;
@@ -84,23 +86,36 @@ public class FeaturedFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerViewAdapter = new ProductListAdapter(results);
         mRecyclerView.setAdapter(mRecyclerViewAdapter);
-        progressBar = (ProgressBar) getActivity().findViewById(R.id.progressbar);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if (!loading && mRecyclerView.getLayoutManager().getItemCount() <=
+                        (mRecyclerView.getLayoutManager().getItemCount()
+                                + 10)) {
+                    // End has been reached
+                    // Do something
+                    new LoadMoreDataTask().execute();
+                    loading = true;
+                }
+            }
+        });
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         new LoadAllProducts().execute("");
 
         return view;
     }
 
 
-
-
     /**
      * Background Async Task to Load all product by making HTTP Request
-     * */
+     */
     class LoadAllProducts extends AsyncTask<String, String, String> {
 
         /**
          * Before starting background thread Show Progress Dialog
-         * */
+         */
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -109,7 +124,7 @@ public class FeaturedFragment extends Fragment {
 
         /**
          * getting All products from url
-         * */
+         */
         protected String doInBackground(String... args) {
 
 
@@ -148,13 +163,11 @@ public class FeaturedFragment extends Fragment {
                         String url = c.getString(TAG_URL);
 
                         // Integer id = idString != null ? Integer.parseInt(idString) : null;
-                        float price=0, discountPrice=0;
-                        if (!priceString.isEmpty())
-                        {
+                        float price = 0, discountPrice = 0;
+                        if (!priceString.isEmpty()) {
                             price = Float.parseFloat(priceString);
                         }
-                        if (!discountPriceString.isEmpty())
-                        {
+                        if (!discountPriceString.isEmpty()) {
                             discountPrice = Float.parseFloat(discountPriceString);
                         }
                         Bitmap imageBitmap = null;
@@ -175,8 +188,7 @@ public class FeaturedFragment extends Fragment {
                 } else {
                     // no products found
                 }
-            } catch (JSONException e)
-            {
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
 
@@ -185,105 +197,99 @@ public class FeaturedFragment extends Fragment {
 
         /**
          * After completing background task Dismiss the progress dialog
-         * **/
+         **/
         protected void onPostExecute(String file_url) {
+            loading =false;
+            mRecyclerViewAdapter.notifyDataSetChanged();
             // dismiss the dialog after getting all products
             progressBar.setVisibility(View.GONE);
         }
-        private class LoadMoreDataTask extends AsyncTask<Void, Void, Void> {
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                progressBar.setVisibility(View.VISIBLE);
-            }
+    }
 
-            @Override
-            protected Void doInBackground(Void... args) {
-                List<NameValuePair> params = new ArrayList<NameValuePair>();
-                // getting JSON string from URL
-                JSONParser jParser = new JSONParser();
-                NameValuePair n = new BasicNameValuePair("start", Integer.toString(itemsLoaded));
-                params.add(n);
-                JSONObject json = jParser.makeHttpRequest(query_url, "GET", params);
-                // products JSONArray
-                JSONArray products = null;
+    class LoadMoreDataTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+        }
 
-                // Check your log cat for JSON reponse
-                Log.d("All Products: ", json.toString());
+        @Override
+        protected Void doInBackground(Void... args) {
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            // getting JSON string from URL
+            JSONParser jParser = new JSONParser();
+            NameValuePair n = new BasicNameValuePair("start", Integer.toString(itemsLoaded));
+            params.add(n);
+            JSONObject json = jParser.makeHttpRequest(query_url, "GET", params);
+            // products JSONArray
+            JSONArray products = null;
 
-                try {
-                    // Checking for SUCCESS TAG
-                    int success = json.getInt(TAG_SUCCESS);
+            // Check your log cat for JSON reponse
+            Log.d("All Products: ", json.toString());
 
-                    if (success == 1) {
-                        // products found
-                        // Getting Array of Products
-                        products = json.getJSONArray(TAG_PRODUCTS);
+            try {
+                // Checking for SUCCESS TAG
+                int success = json.getInt(TAG_SUCCESS);
 
-                        // looping through All Products
-                        itemsLoaded += products.length();
-                        for (int i = 0; i < products.length(); i++) {
-                            JSONObject c = products.getJSONObject(i);
+                if (success == 1) {
+                    // products found
+                    // Getting Array of Products
+                    products = json.getJSONArray(TAG_PRODUCTS);
 
-                            // Storing each json item in variable
-                            String idString = c.getString(TAG_ID);
-                            String name = c.getString(TAG_NAME);
-                            String description = c.getString(TAG_DESCRIPTION);
-                            String priceString = c.getString(TAG_PRICE);
-                            String discountPriceString = c.getString(TAG_DISCOUNTPRICE);
-                            String retailer = c.getString(TAG_RETAILER);
-                            String imageUrl = c.getString(TAG_IMAGEURL);
-                            String url = c.getString(TAG_URL);
-                          //  Integer id = Integer.parseInt(idString);
-                            float price=0, discountPrice=0;
-                            if (!priceString.isEmpty())
-                            {
-                                price = Float.parseFloat(priceString);
-                            }
-                            if (!discountPriceString.isEmpty())
-                            {
-                                discountPrice = Float.parseFloat(discountPriceString);
-                            }
-                            Bitmap imageBitmap = null;
-                            try {
-                                Bitmap sourceImageBitmap = BitmapFactory.decodeStream((InputStream) new URL(imageUrl).getContent());
-                                imageBitmap = ImageUtil.widthAdjust(ImageUtil.cropTopBackgroud(sourceImageBitmap));
+                    // looping through All Products
+                    itemsLoaded += products.length();
+                    for (int i = 0; i < products.length(); i++) {
+                        JSONObject c = products.getJSONObject(i);
 
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                            Product p = new Product(idString, name, "", retailer, price, discountPrice, "",
-                                    "", description, url, imageUrl, imageBitmap, false);
-
-                            results.add(p);
-                            Log.d("Adding Product - ", p.getName());
+                        // Storing each json item in variable
+                        String idString = c.getString(TAG_ID);
+                        String name = c.getString(TAG_NAME);
+                        String description = c.getString(TAG_DESCRIPTION);
+                        String priceString = c.getString(TAG_PRICE);
+                        String discountPriceString = c.getString(TAG_DISCOUNTPRICE);
+                        String retailer = c.getString(TAG_RETAILER);
+                        String imageUrl = c.getString(TAG_IMAGEURL);
+                        String url = c.getString(TAG_URL);
+                        //  Integer id = Integer.parseInt(idString);
+                        float price = 0, discountPrice = 0;
+                        if (!priceString.isEmpty()) {
+                            price = Float.parseFloat(priceString);
                         }
-                        mRecyclerViewAdapter.notifyDataSetChanged();
-                    } else {
-                        // no products found
+                        if (!discountPriceString.isEmpty()) {
+                            discountPrice = Float.parseFloat(discountPriceString);
+                        }
+                        Bitmap imageBitmap = null;
+                        try {
+                            Bitmap sourceImageBitmap = BitmapFactory.decodeStream((InputStream) new URL(imageUrl).getContent());
+                            imageBitmap = ImageUtil.widthAdjust(ImageUtil.cropTopBackgroud(sourceImageBitmap));
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        Product p = new Product(idString, name, "", retailer, price, discountPrice, "",
+                                "", description, url, imageUrl, imageBitmap, false);
+
+                        results.add(p);
+                        Log.d("Adding Product - ", p.getName());
                     }
-                } catch (JSONException e)
-                {
-                    e.printStackTrace();
+                } else {
+                    // no products found
                 }
-
-                return null;
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
 
-            @Override
-            protected void onPostExecute(Void result) {
-//                // Locate listview last item
-//                int position = listview.getLastVisiblePosition();
-//                // Binds the Adapter to the ListView
-//                listview.setAdapter(new ProductListAdapter(results));
-//                // Show the latest retrived results on the top
-//                listview.setSelectionFromTop(position, 0);
-                mRecyclerViewAdapter.notifyDataSetChanged();
-                // Close the progressdialog
-                progressBar.setVisibility(View.GONE);
+            return null;
+        }
 
-            }
+        @Override
+        protected void onPostExecute(Void result) {
+            loading =false;
+            mRecyclerViewAdapter.notifyDataSetChanged();
+            // Close the progressdialog
+            progressBar.setVisibility(View.GONE);
+
         }
     }
 }
