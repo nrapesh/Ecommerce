@@ -17,7 +17,6 @@ import android.view.View;
 import android.widget.ListView;
 
 import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -64,19 +63,6 @@ public class ProductList extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        /* new LoadAllProducts().execute("");
-
-//        ArrayList image_details = getListData();
-        final ListView lv1 = (ListView) findViewById(R.id.product_list);
-//        lv1.setAdapter(new ProductListAdapter(this, image_details));
-        lv1.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-                Object o = lv1.getItemAtPosition(position);
-                Product product = (Product) o;
-                Toast.makeText(ProductList.this, "Selected :" + " " + product, Toast.LENGTH_LONG).show();
-            }
-        });*/
     }
 
     @Override
@@ -121,54 +107,6 @@ public class ProductList extends AppCompatActivity {
         startActivity(intent);
     }
 
-    /*public void browse_brands(View v) {
-        LinearLayout layout = (LinearLayout) findViewById(R.id.brands);
-        TextView mk = (TextView) findViewById(R.id.mk);
-        TextView bags = (TextView) findViewById(R.id.browse_bags);
-        TextView shoes = (TextView) findViewById(R.id.browse_shoes);
-        TextView clothing = (TextView) findViewById(R.id.browse_clothing);
-        TextView watches = (TextView) findViewById(R.id.browse_watches);
-        if (mk.isShown())
-        {
-            Animation brands_slide_up = AnimationUtils.loadAnimation(getApplicationContext(),
-                    R.anim.brands_slide_up);
-            Animation cat_slide_up = AnimationUtils.loadAnimation(getApplicationContext(),
-                    R.anim.cat_slide_up);
-            mk.startAnimation(brands_slide_up);
-            bags.startAnimation(cat_slide_up);
-            shoes.startAnimation(cat_slide_up);
-            clothing.startAnimation(cat_slide_up);
-            watches.startAnimation(cat_slide_up);
-
-            mk.setVisibility(View.GONE);
-            layout.setVisibility(View.GONE);
-            bags.setVisibility(View.VISIBLE);
-            shoes.setVisibility(View.VISIBLE);
-            clothing.setVisibility(View.VISIBLE);
-            watches.setVisibility(View.VISIBLE);
-
-        }
-        else
-        {
-            Animation brands_slide_down = AnimationUtils.loadAnimation(getApplicationContext(),
-                    R.anim.brands_slide_down);
-            Animation cat_slide_down = AnimationUtils.loadAnimation(getApplicationContext(),
-                    R.anim.cat_slide_down);
-            mk.startAnimation(brands_slide_down);
-            bags.startAnimation(cat_slide_down);
-            shoes.startAnimation(cat_slide_down);
-            clothing.startAnimation(cat_slide_down);
-            watches.startAnimation(cat_slide_down);
-
-            layout.setVisibility(View.VISIBLE);
-            mk.setVisibility(View.VISIBLE);
-            bags.setVisibility(View.GONE);
-            shoes.setVisibility(View.GONE);
-            clothing.setVisibility(View.GONE);
-            watches.setVisibility(View.GONE);
-
-        }
-    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -259,7 +197,7 @@ public class ProductList extends AppCompatActivity {
                         String retailer = c.getString(TAG_RETAILER);
                         String imageUrl = c.getString(TAG_IMAGEURL);
                         String url = c.getString(TAG_URL);
-                        Integer id = Integer.parseInt(idString);
+                        //Integer id = Integer.parseInt(idString);
                         float price=0, discountPrice=0;
                         if (!priceString.isEmpty())
                         {
@@ -277,7 +215,7 @@ public class ProductList extends AppCompatActivity {
                             e.printStackTrace();
                         }
 
-                        Product p = new Product(id, name, "", retailer, price, discountPrice, "",
+                        Product p = new Product(idString, name, "", retailer, price, discountPrice, "",
                                 "", description, url, imageUrl, imageBitmap, false);
 
                         results.add(p);
@@ -330,104 +268,104 @@ public class ProductList extends AppCompatActivity {
             });*/
         }
 
-        private class LoadMoreDataTask extends AsyncTask<Void, Void, Void> {
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                // Create a progressdialog
-                pDialog = new ProgressDialog(ProductList.this);
-                // Set progressdialog title
-                pDialog.setTitle("Load More Products");
-                // Set progressdialog message
-                pDialog.setMessage("Loading more products. Please wait...");
-                pDialog.setIndeterminate(false);
-                // Show progressdialog
-                pDialog.show();
-            }
-
-            @Override
-            protected Void doInBackground(Void... args) {
-                List<NameValuePair> params = new ArrayList<NameValuePair>();
-                // getting JSON string from URL
-                JSONParser jParser = new JSONParser();
-                NameValuePair n = new BasicNameValuePair("start", Integer.toString(itemsLoaded));
-                params.add(n);
-                JSONObject json = jParser.makeHttpRequest(url_all_products, "GET", params);
-                // products JSONArray
-                JSONArray products = null;
-
-                // Check your log cat for JSON reponse
-                Log.d("All Products: ", json.toString());
-
-                try {
-                    // Checking for SUCCESS TAG
-                    int success = json.getInt(TAG_SUCCESS);
-
-                    if (success == 1) {
-                        // products found
-                        // Getting Array of Products
-                        products = json.getJSONArray(TAG_PRODUCTS);
-
-                        // looping through All Products
-                        itemsLoaded += products.length();
-                        for (int i = 0; i < products.length(); i++) {
-                            JSONObject c = products.getJSONObject(i);
-
-                            // Storing each json item in variable
-                            String idString = c.getString(TAG_ID);
-                            String name = c.getString(TAG_NAME);
-                            String description = c.getString(TAG_DESCRIPTION);
-                            String priceString = c.getString(TAG_PRICE);
-                            String discountPriceString = c.getString(TAG_DISCOUNTPRICE);
-                            String retailer = c.getString(TAG_RETAILER);
-                            String imageUrl = c.getString(TAG_IMAGEURL);
-                            String url = c.getString(TAG_URL);
-                            Integer id = Integer.parseInt(idString);
-                            float price=0, discountPrice=0;
-                            if (!priceString.isEmpty())
-                            {
-                                price = Float.parseFloat(priceString);
-                            }
-                            if (!discountPriceString.isEmpty())
-                            {
-                                discountPrice = Float.parseFloat(discountPriceString);
-                            }
-                            Bitmap imageBitmap = null;
-                            try {
-                                imageBitmap = BitmapFactory.decodeStream((InputStream) new URL(imageUrl).getContent());
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                            Product p = new Product(id, name, "", retailer, price, discountPrice, "",
-                                    "", description, url, imageUrl, imageBitmap, false);
-
-                            results.add(p);
-                            Log.d("Adding Product - ", p.getName());
-                        }
-                    } else {
-                        // no products found
-                    }
-                } catch (JSONException e)
-                {
-                    e.printStackTrace();
-                }
-
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void result) {
-                // Locate listview last item
-                int position = listview.getLastVisiblePosition();
-                // Binds the Adapter to the ListView
-                listview.setAdapter(new ProductListAdapter(ProductList.this, results));
-                // Show the latest retrived results on the top
-                listview.setSelectionFromTop(position, 0);
-                // Close the progressdialog
-                pDialog.dismiss();
-            }
-        }
+//        private class LoadMoreDataTask extends AsyncTask<Void, Void, Void> {
+//            @Override
+//            protected void onPreExecute() {
+//                super.onPreExecute();
+//                // Create a progressdialog
+//                pDialog = new ProgressDialog(ProductList.this);
+//                // Set progressdialog title
+//                pDialog.setTitle("Load More Products");
+//                // Set progressdialog message
+//                pDialog.setMessage("Loading more products. Please wait...");
+//                pDialog.setIndeterminate(false);
+//                // Show progressdialog
+//                pDialog.show();
+//            }
+//
+//            @Override
+//            protected Void doInBackground(Void... args) {
+//                List<NameValuePair> params = new ArrayList<NameValuePair>();
+//                // getting JSON string from URL
+//                JSONParser jParser = new JSONParser();
+//                NameValuePair n = new BasicNameValuePair("start", Integer.toString(itemsLoaded));
+//                params.add(n);
+//                JSONObject json = jParser.makeHttpRequest(url_all_products, "GET", params);
+//                // products JSONArray
+//                JSONArray products = null;
+//
+//                // Check your log cat for JSON reponse
+//                Log.d("All Products: ", json.toString());
+//
+//                try {
+//                    // Checking for SUCCESS TAG
+//                    int success = json.getInt(TAG_SUCCESS);
+//
+//                    if (success == 1) {
+//                        // products found
+//                        // Getting Array of Products
+//                        products = json.getJSONArray(TAG_PRODUCTS);
+//
+//                        // looping through All Products
+//                        itemsLoaded += products.length();
+//                        for (int i = 0; i < products.length(); i++) {
+//                            JSONObject c = products.getJSONObject(i);
+//
+//                            // Storing each json item in variable
+//                            String idString = c.getString(TAG_ID);
+//                            String name = c.getString(TAG_NAME);
+//                            String description = c.getString(TAG_DESCRIPTION);
+//                            String priceString = c.getString(TAG_PRICE);
+//                            String discountPriceString = c.getString(TAG_DISCOUNTPRICE);
+//                            String retailer = c.getString(TAG_RETAILER);
+//                            String imageUrl = c.getString(TAG_IMAGEURL);
+//                            String url = c.getString(TAG_URL);
+//                            Integer id = Integer.parseInt(idString);
+//                            float price=0, discountPrice=0;
+//                            if (!priceString.isEmpty())
+//                            {
+//                                price = Float.parseFloat(priceString);
+//                            }
+//                            if (!discountPriceString.isEmpty())
+//                            {
+//                                discountPrice = Float.parseFloat(discountPriceString);
+//                            }
+//                            Bitmap imageBitmap = null;
+//                            try {
+//                                imageBitmap = BitmapFactory.decodeStream((InputStream) new URL(imageUrl).getContent());
+//
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//
+//                            Product p = new Product(idString, name, "", retailer, price, discountPrice, "",
+//                                    "", description, url, imageUrl, imageBitmap, false);
+//
+//                            results.add(p);
+//                            Log.d("Adding Product - ", p.getName());
+//                        }
+//                    } else {
+//                        // no products found
+//                    }
+//                } catch (JSONException e)
+//                {
+//                    e.printStackTrace();
+//                }
+//
+//                return null;
+//            }
+//
+//            @Override
+//            protected void onPostExecute(Void result) {
+//                // Locate listview last item
+//                int position = listview.getLastVisiblePosition();
+//                // Binds the Adapter to the ListView
+//                listview.setAdapter(new ProductListAdapter(ProductList.this, results));
+//                // Show the latest retrived results on the top
+//                listview.setSelectionFromTop(position, 0);
+//                // Close the progressdialog
+//                pDialog.dismiss();
+//            }
+//        }
     }
 }

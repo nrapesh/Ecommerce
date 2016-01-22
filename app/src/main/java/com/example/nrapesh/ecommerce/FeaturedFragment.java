@@ -5,15 +5,14 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -54,6 +53,10 @@ public class FeaturedFragment extends Fragment {
     private ProgressBar progressBar;
     private int mTab;
 
+    ArrayList<Product> results = new ArrayList<Product>();
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mRecyclerViewAdapter;
+
     public static FeaturedFragment newInstance(int tab) {
         Bundle args = new Bundle();
         args.putInt(ARG_TAB, tab);
@@ -75,26 +78,18 @@ public class FeaturedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.products_list, container, false);
-        final ListView lv1 = (ListView) view.findViewById(R.id.product_list);
+
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        // use a linear layout manager
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerViewAdapter = new ProductListAdapter(results);
+        mRecyclerView.setAdapter(mRecyclerViewAdapter);
         progressBar = (ProgressBar) getActivity().findViewById(R.id.progressbar);
         new LoadAllProducts().execute("");
 
-//        ArrayList image_details = getListData();
-//        lv1.setAdapter(new ProductListAdapter(this, image_details));
-        lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-                Object o = lv1.getItemAtPosition(position);
-                Product product = (Product) o;
-                Toast.makeText(FeaturedFragment.this.getContext(), "Selected :" + " " + product, Toast.LENGTH_LONG).show();
-            }
-        });
-        //TextView tvTitle = (TextView) view.findViewById(R.id.tvTitle);
-        //tvTitle.setText("Fragment Featured");
         return view;
     }
 
-    ArrayList<Product> results = new ArrayList<Product>();
 
 
 
@@ -151,7 +146,8 @@ public class FeaturedFragment extends Fragment {
                         String retailer = c.getString(TAG_RETAILER);
                         String imageUrl = c.getString(TAG_IMAGEURL);
                         String url = c.getString(TAG_URL);
-                        Integer id = Integer.parseInt(idString);
+
+                        // Integer id = idString != null ? Integer.parseInt(idString) : null;
                         float price=0, discountPrice=0;
                         if (!priceString.isEmpty())
                         {
@@ -170,7 +166,7 @@ public class FeaturedFragment extends Fragment {
                             e.printStackTrace();
                         }
 
-                        Product p = new Product(id, name, "", retailer, price, discountPrice, "",
+                        Product p = new Product(idString, name, "", retailer, price, discountPrice, "",
                                 "", description, url, imageUrl, imageBitmap, false);
 
                         results.add(p);
@@ -193,34 +189,6 @@ public class FeaturedFragment extends Fragment {
         protected void onPostExecute(String file_url) {
             // dismiss the dialog after getting all products
             progressBar.setVisibility(View.GONE);
-            listview = (ListView) view.findViewById(R.id.product_list);
-            listview.setAdapter(new ProductListAdapter(FeaturedFragment.this.getContext(), results));
-            // Create an OnScrollListener
-            listview.setOnScrollListener(new AbsListView.OnScrollListener() {
-
-                @Override
-                public void onScrollStateChanged(AbsListView view,
-                                                 int scrollState) { // TODO Auto-generated method stub
-                    int threshold = 1;
-                    int count = listview.getCount();
-
-                    if (scrollState == SCROLL_STATE_IDLE) {
-                        if (listview.getLastVisiblePosition() >= count
-                                - threshold) {
-                            // Execute LoadMoreDataTask AsyncTask
-                            new LoadMoreDataTask().execute();
-                        }
-                    }
-                }
-
-                @Override
-                public void onScroll(AbsListView view, int firstVisibleItem,
-                                     int visibleItemCount, int totalItemCount) {
-                    // TODO Auto-generated method stub
-
-                }
-
-            });
         }
         private class LoadMoreDataTask extends AsyncTask<Void, Void, Void> {
             @Override
@@ -266,7 +234,7 @@ public class FeaturedFragment extends Fragment {
                             String retailer = c.getString(TAG_RETAILER);
                             String imageUrl = c.getString(TAG_IMAGEURL);
                             String url = c.getString(TAG_URL);
-                            Integer id = Integer.parseInt(idString);
+                          //  Integer id = Integer.parseInt(idString);
                             float price=0, discountPrice=0;
                             if (!priceString.isEmpty())
                             {
@@ -285,12 +253,13 @@ public class FeaturedFragment extends Fragment {
                                 e.printStackTrace();
                             }
 
-                            Product p = new Product(id, name, "", retailer, price, discountPrice, "",
+                            Product p = new Product(idString, name, "", retailer, price, discountPrice, "",
                                     "", description, url, imageUrl, imageBitmap, false);
 
                             results.add(p);
                             Log.d("Adding Product - ", p.getName());
                         }
+                        mRecyclerViewAdapter.notifyDataSetChanged();
                     } else {
                         // no products found
                     }
@@ -304,12 +273,13 @@ public class FeaturedFragment extends Fragment {
 
             @Override
             protected void onPostExecute(Void result) {
-                // Locate listview last item
-                int position = listview.getLastVisiblePosition();
-                // Binds the Adapter to the ListView
-                listview.setAdapter(new ProductListAdapter(FeaturedFragment.this.getContext(), results));
-                // Show the latest retrived results on the top
-                listview.setSelectionFromTop(position, 0);
+//                // Locate listview last item
+//                int position = listview.getLastVisiblePosition();
+//                // Binds the Adapter to the ListView
+//                listview.setAdapter(new ProductListAdapter(results));
+//                // Show the latest retrived results on the top
+//                listview.setSelectionFromTop(position, 0);
+                mRecyclerViewAdapter.notifyDataSetChanged();
                 // Close the progressdialog
                 progressBar.setVisibility(View.GONE);
 

@@ -13,7 +13,7 @@ import android.graphics.Bitmap;
 
 public class Product {
 
-    private Integer id;
+    private String id;
 
     private String name;
     private String brand;
@@ -28,11 +28,8 @@ public class Product {
     private Bitmap imageBitmap;
     private boolean isOutOfStock;
 
-    public Product() {
-        // TODO Auto-generated constructor stub
-    }
 
-    public Product(Integer id, String name, String brand, String retailer, float price, float discountedPrice, String category,
+    public Product(String id, String name, String brand, String retailer, float price, float discountedPrice, String category,
                    String color, String description, String url, String imageUrl, Bitmap imageBitmap, boolean isOutOfStock) {
         super();
         this.id = id;
@@ -175,11 +172,11 @@ public class Product {
         return isOutOfStock;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

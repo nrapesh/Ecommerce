@@ -8,13 +8,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -50,7 +48,8 @@ public class BrandProductsActivity extends AppCompatActivity {
     private String brand="";
 //    private String url_products = "http://ec2-52-77-246-8.ap-southeast-1.compute.amazonaws.com/get_products_by_brand.php";
     private String url_products_by_brand = "http://ec2-52-77-246-8.ap-southeast-1.compute.amazonaws.com/get_products_by_brand.php";
-    ListView listview;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mRecyclerViewAdapter;
 
 
     @Override
@@ -68,19 +67,13 @@ public class BrandProductsActivity extends AppCompatActivity {
 //        v.setGravity(Gravity.LEFT | Gravity.CENTER);
 //        v.setText(brand.toUpperCase());
 
-        new LoadProducts().execute("");
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        // use a linear layout manager
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerViewAdapter = new ProductListAdapter(results);
+        mRecyclerView.setAdapter(mRecyclerViewAdapter);
 
-//        ArrayList image_details = getListData();
-        final ListView lv1 = (ListView) findViewById(R.id.product_list);
-//        lv1.setAdapter(new ProductListAdapter(this, image_details));
-        lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-        //        Object o = lv1.getItemAtPosition(position);
-        //        Product product = (Product) o;
-        //        Toast.makeText(BrandProductsActivity.this, "Selected :" + " " + product, Toast.LENGTH_LONG).show();
-            }
-        });
+        new LoadProducts().execute("");
     }
 
     @Override
@@ -169,7 +162,7 @@ public class BrandProductsActivity extends AppCompatActivity {
                         String retailer = c.getString(TAG_RETAILER);
                         String imageUrl = c.getString(TAG_IMAGEURL);
                         String url = c.getString(TAG_URL);
-                        Integer id = Integer.parseInt(idString);
+                       // Integer id = Integer.parseInt(idString);
                         float price=0, discountPrice=0;
                         if (!priceString.isEmpty())
                         {
@@ -188,7 +181,7 @@ public class BrandProductsActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
 
-                        Product p = new Product(id, name, "", retailer, price, discountPrice, "",
+                        Product p = new Product(idString, name, "", retailer, price, discountPrice, "",
                                 "", description, url, imageUrl, imageBitmap, false);
 
                         results.add(p);
@@ -210,36 +203,9 @@ public class BrandProductsActivity extends AppCompatActivity {
          * After completing background task Dismiss the progress dialog
          * **/
         protected void onPostExecute(String file_url) {
+            mRecyclerViewAdapter.notifyDataSetChanged();
             // dismiss the dialog after getting all products
             pDialog.dismiss();
-            listview = (ListView) findViewById(R.id.product_list);
-            listview.setAdapter(new ProductListAdapter(BrandProductsActivity.this, results));
-            // Create an OnScrollListener
-            listview.setOnScrollListener(new AbsListView.OnScrollListener() {
-
-                @Override
-                public void onScrollStateChanged(AbsListView view,
-                                                 int scrollState) { // TODO Auto-generated method stub
-                    int threshold = 1;
-                    int count = listview.getCount();
-
-                    if (scrollState == SCROLL_STATE_IDLE) {
-                        if (listview.getLastVisiblePosition() >= count
-                                - threshold) {
-                            // Execute LoadMoreDataTask AsyncTask
-                            new LoadMoreDataTask().execute();
-                        }
-                    }
-                }
-
-                @Override
-                public void onScroll(AbsListView view, int firstVisibleItem,
-                                     int visibleItemCount, int totalItemCount) {
-                    // TODO Auto-generated method stub
-
-                }
-
-            });
         }
 
         private class LoadMoreDataTask extends AsyncTask<Void, Void, Void> {
@@ -297,7 +263,7 @@ public class BrandProductsActivity extends AppCompatActivity {
                             String retailer = c.getString(TAG_RETAILER);
                             String imageUrl = c.getString(TAG_IMAGEURL);
                             String url = c.getString(TAG_URL);
-                            Integer id = Integer.parseInt(idString);
+                            //Integer id = Integer.parseInt(idString);
                             float price=0, discountPrice=0;
                             if (!priceString.isEmpty())
                             {
@@ -316,7 +282,7 @@ public class BrandProductsActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
 
-                            Product p = new Product(id, name, "", retailer, price, discountPrice, "",
+                            Product p = new Product(idString, name, "", retailer, price, discountPrice, "",
                                     "", description, url, imageUrl, imageBitmap, false);
 
                             results.add(p);
@@ -335,12 +301,7 @@ public class BrandProductsActivity extends AppCompatActivity {
 
             @Override
             protected void onPostExecute(Void result) {
-                // Locate listview last item
-                int position = listview.getLastVisiblePosition();
-                // Binds the Adapter to the ListView
-                listview.setAdapter(new ProductListAdapter(BrandProductsActivity.this, results));
-                // Show the latest retrived results on the top
-                listview.setSelectionFromTop(position, 0);
+                mRecyclerViewAdapter.notifyDataSetChanged();
                 // Close the progressdialog
                 pDialog.dismiss();
             }
