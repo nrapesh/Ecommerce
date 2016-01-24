@@ -117,6 +117,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ViewHolder> {
 //
         Glide.with(context)
                 .load(listData.get(position).getImageUrl())
+                .placeholder(R.drawable.image_placeholder)
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(holder.imageView);
   }
