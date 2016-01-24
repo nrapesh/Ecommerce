@@ -3,7 +3,6 @@ package com.example.nrapesh.ecommerce;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -20,8 +19,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 /**
@@ -70,7 +67,7 @@ public class BrandProductsActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         // use a linear layout manager
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerViewAdapter = new ProductListAdapter(results);
+        mRecyclerViewAdapter = new ProductListAdapter(this, results);
         mRecyclerView.setAdapter(mRecyclerViewAdapter);
 
         new LoadProducts().execute("");
@@ -173,13 +170,13 @@ public class BrandProductsActivity extends AppCompatActivity {
                             discountPrice = Float.parseFloat(discountPriceString);
                         }
                         Bitmap imageBitmap = null;
-                        try {
-                            Bitmap sourceImageBitmap = BitmapFactory.decodeStream((InputStream) new URL(imageUrl).getContent());
-                            imageBitmap = ImageUtil.widthAdjust(ImageUtil.cropTopBackgroud(sourceImageBitmap));
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+//                        try {
+//                            Bitmap sourceImageBitmap = BitmapFactory.decodeStream((InputStream) new URL(imageUrl).getContent());
+//                            imageBitmap = ImageUtil.widthAdjust(ImageUtil.cropTopBackgroud(sourceImageBitmap));
+//
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
 
                         Product p = new Product(idString, name, "", retailer, price, discountPrice, "",
                                 "", description, url, imageUrl, imageBitmap, false);
@@ -274,13 +271,13 @@ public class BrandProductsActivity extends AppCompatActivity {
                                 discountPrice = Float.parseFloat(discountPriceString);
                             }
                             Bitmap imageBitmap = null;
-                            try {
-                                Bitmap sourceImageBitmap = BitmapFactory.decodeStream((InputStream) new URL(imageUrl).getContent());
-                                imageBitmap = ImageUtil.widthAdjust(ImageUtil.cropTopBackgroud(sourceImageBitmap));
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+//                            try {
+//                                Bitmap sourceImageBitmap = BitmapFactory.decodeStream((InputStream) new URL(imageUrl).getContent());
+//                                imageBitmap = ImageUtil.widthAdjust(ImageUtil.cropTopBackgroud(sourceImageBitmap));
+//
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
 
                             Product p = new Product(idString, name, "", retailer, price, discountPrice, "",
                                     "", description, url, imageUrl, imageBitmap, false);

@@ -12,8 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ProgressBar;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -75,7 +73,7 @@ public class BrowseActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         // use a linear layout manager
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerViewAdapter = new ProductListAdapter(results);
+        mRecyclerViewAdapter = new ProductListAdapter(this, results);
         mRecyclerView.setAdapter(mRecyclerViewAdapter);
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -183,13 +181,13 @@ public class BrowseActivity extends AppCompatActivity {
                             discountPrice = Float.parseFloat(discountPriceString);
                         }
                         Bitmap imageBitmap = null;
-                        try {
-                            Bitmap sourceImageBitmap = BitmapFactory.decodeStream((InputStream) new URL(imageUrl).getContent());
-                            imageBitmap = ImageUtil.widthAdjust(ImageUtil.cropTopBackgroud(sourceImageBitmap));
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+//                        try {
+//                            Bitmap sourceImageBitmap = BitmapFactory.decodeStream((InputStream) new URL(imageUrl).getContent());
+//                            imageBitmap = ImageUtil.widthAdjust(ImageUtil.cropTopBackgroud(sourceImageBitmap));
+//
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
 
                         Product p = new Product(idString, name, "", retailer, price, discountPrice, "",
                                 "", description, url, imageUrl, imageBitmap, false);

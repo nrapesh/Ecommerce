@@ -1,7 +1,6 @@
 package com.example.nrapesh.ecommerce;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,8 +19,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,7 +81,7 @@ public class FeaturedFragment extends Fragment {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         // use a linear layout manager
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerViewAdapter = new ProductListAdapter(results);
+        mRecyclerViewAdapter = new ProductListAdapter(this.getActivity(), results);
         mRecyclerView.setAdapter(mRecyclerViewAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -171,17 +168,17 @@ public class FeaturedFragment extends Fragment {
                         if (!discountPriceString.isEmpty()) {
                             discountPrice = Float.parseFloat(discountPriceString);
                         }
-                        Bitmap imageBitmap = null;
-                        try {
-                            Bitmap sourceImageBitmap = BitmapFactory.decodeStream((InputStream) new URL(imageUrl).getContent());
-                            imageBitmap = ImageUtil.widthAdjust(ImageUtil.cropTopBackgroud(sourceImageBitmap));
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+//                        Bitmap imageBitmap = null;
+//                        try {
+//                            Bitmap sourceImageBitmap = BitmapFactory.decodeStream((InputStream) new URL(imageUrl).getContent());
+//                            imageBitmap = ImageUtil.widthAdjust(ImageUtil.cropTopBackgroud(sourceImageBitmap));
+//
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
 
                         Product p = new Product(idString, name, "", retailer, price, discountPrice, "",
-                                "", description, url, imageUrl, imageBitmap, false);
+                                "", description, url, imageUrl, null /* imageBitmap */, false);
 
                         results.add(p);
                         Log.d("Adding Product - ", p.getName());
@@ -260,13 +257,13 @@ public class FeaturedFragment extends Fragment {
                             discountPrice = Float.parseFloat(discountPriceString);
                         }
                         Bitmap imageBitmap = null;
-                        try {
-                            Bitmap sourceImageBitmap = BitmapFactory.decodeStream((InputStream) new URL(imageUrl).getContent());
-                            imageBitmap = ImageUtil.widthAdjust(ImageUtil.cropTopBackgroud(sourceImageBitmap));
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+//                        try {
+//                            Bitmap sourceImageBitmap = BitmapFactory.decodeStream((InputStream) new URL(imageUrl).getContent());
+//                            imageBitmap = ImageUtil.widthAdjust(ImageUtil.cropTopBackgroud(sourceImageBitmap));
+//
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
 
                         Product p = new Product(idString, name, "", retailer, price, discountPrice, "",
                                 "", description, url, imageUrl, imageBitmap, false);

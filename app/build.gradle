@@ -42,4 +42,7 @@ dependencies {
     compile 'com.android.support:design:22.2.0'
     compile 'com.facebook.android:facebook-android-sdk:4.6.0'
     compile 'org.imgscalr:imgscalr-lib:4.2'
+    compile "com.squareup.picasso:picasso:2.4.0"
+    compile "com.github.bumptech.glide:glide:3.6.1"
+
 }
