@@ -73,52 +73,11 @@ public class ProductListAdapter extends RecyclerView.Adapter<ViewHolder> {
         holder.discountPriceView.setText(discountPriceText);
         String retailerString = listData.get(position).getRetailer().toUpperCase() + ", USA";
         holder.retailerView.setText(retailerString);
-        //holder.imageView.setImageResource(R.drawable.michael_kors);
-        //holder.imageView.setImageURI(Uri.parse(listData.get(position).getImageUrl()));
 
-//        holder.imageView.setImageBitmap(listData.get(position).getImageBitmap());
-        holder.imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-//        Picasso.with(context)
-//                .load(listData.get(position).getImageUrl())
-////                .transform(new Transformation() {
-////                    @Override
-////                    public Bitmap transform(Bitmap source) {
-////                        Bitmap temp = source.copy(source.getConfig(), true /* mutable */);
-////                        source.recycle();
-////                        return ImageUtil.widthAdjust(ImageUtil.cropTopBackgroud(temp));
-////                    }
-////
-////                    @Override
-////                    public String key() {
-////                        return "imageResizeTransformation";
-////                    }
-////                })
-//                .fit()
-//                .noFade()
-//                .into(holder.imageView);
-//       Picasso.with(context)
-//                .load(listData.get(position).getImageUrl())
-////                .transform(new Transformation() {
-////                    @Override
-////                    public Bitmap transform(Bitmap source) {
-////                        Bitmap temp = source.copy(source.getConfig(), true /* mutable */);
-////                        source.recycle();
-////                        return ImageUtil.widthAdjust(ImageUtil.cropTopBackgroud(temp));
-////                    }
-////
-////                    @Override
-////                    public String key() {
-////                        return "imageResizeTransformation";
-////                    }
-////                })
-//                .fit()
-//                .noFade()
-//                .into(holder.imageView);
-//
         Glide.with(context)
                 .load(listData.get(position).getImageUrl())
                 .placeholder(R.drawable.image_placeholder)
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(holder.imageView);
   }
 
