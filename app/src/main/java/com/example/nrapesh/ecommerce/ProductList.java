@@ -127,5 +127,4 @@ public class ProductList extends AppCompatActivity {
 
         return results;
     }
-
 }

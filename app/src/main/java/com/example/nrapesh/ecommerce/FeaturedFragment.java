@@ -160,7 +160,6 @@ public class FeaturedFragment extends Fragment {
                         String imageUrl = c.getString(TAG_IMAGEURL);
                         String url = c.getString(TAG_URL);
 
-
                         // Integer id = idString != null ? Integer.parseInt(idString) : null;
                         float price = 0, discountPrice = 0;
                         if (!priceString.isEmpty()) {
@@ -225,7 +224,6 @@ public class FeaturedFragment extends Fragment {
 
             // Check your log cat for JSON reponse
             Log.d("All Products: ", json.toString());
-
 
             try {
                 // Checking for SUCCESS TAG
