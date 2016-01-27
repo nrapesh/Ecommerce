@@ -172,9 +172,16 @@ public class BrowseActivity extends AppCompatActivity {
                         String retailer = c.getString(TAG_RETAILER);
                         String imageUrl = c.getString(TAG_IMAGEURL);
                         String url = c.getString(TAG_URL);
+<<<<<<< HEAD
                         //Integer id = Integer.parseInt(idString);
                         float price = 0, discountPrice = 0;
                         if (!priceString.isEmpty()) {
+=======
+
+                        float price=0, discountPrice=0;
+                        if (!priceString.isEmpty())
+                        {
+>>>>>>> origin/master
                             price = Float.parseFloat(priceString);
                         }
                         if (!discountPriceString.isEmpty()) {
@@ -219,6 +226,7 @@ public class BrowseActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
 
+<<<<<<< HEAD
         }
 
         @Override
@@ -275,6 +283,71 @@ public class BrowseActivity extends AppCompatActivity {
 
                         } catch (Exception e) {
                             e.printStackTrace();
+=======
+            @Override
+            protected Void doInBackground(Void... args) {
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+                // getting JSON string from URL
+                JSONParser jParser = new JSONParser();
+                NameValuePair n_start = new BasicNameValuePair("start", Integer.toString(itemsLoaded));
+                params.add(n_start);
+                NameValuePair n_category = new BasicNameValuePair("category", String.valueOf(category));
+                params.add(n_category);
+                JSONObject json = jParser.makeHttpRequest(url_products, "GET", params);
+                // products JSONArray
+                JSONArray products = null;
+
+                // Check your log cat for JSON reponse
+                Log.d("All Products: ", json.toString());
+
+                try {
+                    // Checking for SUCCESS TAG
+                    int success = json.getInt(TAG_SUCCESS);
+
+                    if (success == 1) {
+                        // products found
+                        // Getting Array of Products
+                        products = json.getJSONArray(TAG_PRODUCTS);
+
+                        // looping through All Products
+                        itemsLoaded += products.length();
+                        for (int i = 0; i < products.length(); i++) {
+                            JSONObject c = products.getJSONObject(i);
+
+                            // Storing each json item in variable
+                            String idString = c.getString(TAG_ID);
+                            String name = c.getString(TAG_NAME);
+                            String description = c.getString(TAG_DESCRIPTION);
+                            String priceString = c.getString(TAG_PRICE);
+                            String discountPriceString = c.getString(TAG_DISCOUNTPRICE);
+                            String retailer = c.getString(TAG_RETAILER);
+                            String imageUrl = c.getString(TAG_IMAGEURL);
+                            String url = c.getString(TAG_URL);
+
+                            float price=0, discountPrice=0;
+                            if (!priceString.isEmpty())
+                            {
+                                price = Float.parseFloat(priceString);
+                            }
+                            if (!discountPriceString.isEmpty())
+                            {
+                                discountPrice = Float.parseFloat(discountPriceString);
+                            }
+                            Bitmap imageBitmap = null;
+                            try {
+                                Bitmap sourceImageBitmap = BitmapFactory.decodeStream((InputStream) new URL(imageUrl).getContent());
+                                imageBitmap = ImageUtil.widthAdjust(ImageUtil.cropTopBackgroud(sourceImageBitmap));
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            Product p = new Product(idString, name, "", retailer, price, discountPrice, "",
+                                    "", description, url, imageUrl, imageBitmap, false);
+
+                            results.add(p);
+                            Log.d("Adding Product - ", p.getName());
+>>>>>>> origin/master
                         }
 
                         Product p = new Product(idString, name, "", retailer, price, discountPrice, "",

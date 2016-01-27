@@ -159,7 +159,7 @@ public class BrandProductsActivity extends AppCompatActivity {
                         String retailer = c.getString(TAG_RETAILER);
                         String imageUrl = c.getString(TAG_IMAGEURL);
                         String url = c.getString(TAG_URL);
-                       // Integer id = Integer.parseInt(idString);
+
                         float price=0, discountPrice=0;
                         if (!priceString.isEmpty())
                         {
@@ -260,7 +260,7 @@ public class BrandProductsActivity extends AppCompatActivity {
                             String retailer = c.getString(TAG_RETAILER);
                             String imageUrl = c.getString(TAG_IMAGEURL);
                             String url = c.getString(TAG_URL);
-                            //Integer id = Integer.parseInt(idString);
+
                             float price=0, discountPrice=0;
                             if (!priceString.isEmpty())
                             {
