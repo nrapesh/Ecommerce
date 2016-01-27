@@ -47,7 +47,7 @@ public class BrandSelectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.brand_selection_page);
         // Set a toolbar to replace the action bar.
-        Toolbar toolbar = (Toolbar) findViewById(R.id.titlebar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
