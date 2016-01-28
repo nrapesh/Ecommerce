@@ -16,4 +16,7 @@
     // Launcher page
     <string name="sign_in">Sign In with Email</string>
     <string name="create_account">Create Account</string>
+
+    // Symbols
+    <string name="Rs">\u20B9</string>
 </resources>

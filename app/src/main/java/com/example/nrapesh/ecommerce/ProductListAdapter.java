@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
+import org.apache.commons.lang3.text.WordUtils;
 
 /**
  * Adapter to manage list of products.
@@ -55,19 +56,24 @@ public class ProductListAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.nameView.setText(listData.get(position).getName());
+        String brand = listData.get(position).getBrand();
+        String name = listData.get(position).getName();
+
+        String titleString = brand.toUpperCase() + "    " + WordUtils.capitalize(name);
+        holder.nameView.setText(titleString);
         String priceText = "";
         String discountPriceText = "";
         Float price = listData.get(position).getPrice();
         Float discountPrice = listData.get(position).getDiscountPrice();
+        String rupee = this.context.getString(R.string.Rs);
         if (discountPrice == null || discountPrice == 0 || discountPrice.equals(price))
         {
-            priceText = "$" + Float.toString(price);
+            priceText = rupee + String.format("%-10.0f", price);
         }
         else
         {
-            priceText = "Orig. $" + Float.toString(price);
-            discountPriceText = "Now $" + Float.toString(discountPrice);
+            priceText = "Orig. " + rupee + String.format("%-10.0f", price);
+            discountPriceText = "Now " + rupee + String.format("%-10.0f", discountPrice);
         }
         holder.priceView.setText(priceText);
         holder.discountPriceView.setText(discountPriceText);

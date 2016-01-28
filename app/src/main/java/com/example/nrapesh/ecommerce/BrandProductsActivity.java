@@ -34,6 +34,7 @@ public class BrandProductsActivity extends AppCompatActivity {
     private static String TAG_PRODUCTS = "product";
     private static String TAG_ID = "id";
     private static String TAG_NAME = "name";
+    private static String TAG_BRAND = "brand";
     private static String TAG_DESCRIPTION = "description";
     private static String TAG_PRICE = "price";
     private static String TAG_DISCOUNTPRICE = "discountPrice";
@@ -153,6 +154,7 @@ public class BrandProductsActivity extends AppCompatActivity {
                         // Storing each json item in variable
                         String idString = c.getString(TAG_ID);
                         String name = c.getString(TAG_NAME);
+                        String brand = c.getString(TAG_BRAND);
                         String description = c.getString(TAG_DESCRIPTION);
                         String priceString = c.getString(TAG_PRICE);
                         String discountPriceString = c.getString(TAG_DISCOUNTPRICE);
@@ -178,7 +180,7 @@ public class BrandProductsActivity extends AppCompatActivity {
 //                            e.printStackTrace();
 //                        }
 
-                        Product p = new Product(idString, name, "", retailer, price, discountPrice, "",
+                        Product p = new Product(idString, name, brand, retailer, price, discountPrice, "",
                                 "", description, url, imageUrl, imageBitmap, false);
 
                         results.add(p);
@@ -254,6 +256,7 @@ public class BrandProductsActivity extends AppCompatActivity {
                             // Storing each json item in variable
                             String idString = c.getString(TAG_ID);
                             String name = c.getString(TAG_NAME);
+                            String brand = c.getString(TAG_BRAND);
                             String description = c.getString(TAG_DESCRIPTION);
                             String priceString = c.getString(TAG_PRICE);
                             String discountPriceString = c.getString(TAG_DISCOUNTPRICE);
@@ -279,7 +282,7 @@ public class BrandProductsActivity extends AppCompatActivity {
 //                                e.printStackTrace();
 //                            }
 
-                            Product p = new Product(idString, name, "", retailer, price, discountPrice, "",
+                            Product p = new Product(idString, name, brand, retailer, price, discountPrice, "",
                                     "", description, url, imageUrl, imageBitmap, false);
 
                             results.add(p);
