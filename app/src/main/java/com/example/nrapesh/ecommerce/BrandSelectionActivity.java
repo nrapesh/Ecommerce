@@ -42,6 +42,7 @@ public class BrandSelectionActivity extends AppCompatActivity {
             "michael kors", "michael kors", "michael kors", "michael kors", "michael kors", "michael kors"} ;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
