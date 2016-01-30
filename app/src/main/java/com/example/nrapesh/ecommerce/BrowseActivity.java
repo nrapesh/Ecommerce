@@ -1,8 +1,11 @@
 package com.example.nrapesh.ecommerce;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -69,7 +72,6 @@ public class BrowseActivity extends AppCompatActivity {
 //        v.setGravity(Gravity.LEFT | Gravity.CENTER);
 //        v.setText(PageFragment.M_CATEGORIES[category - 1]);
 
-        new LoadProducts().execute("");
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         // use a linear layout manager
@@ -93,6 +95,11 @@ public class BrowseActivity extends AppCompatActivity {
                 }
             }
         });
+
+        if (isNetAvailable()) {
+            new LoadProducts().execute("");
+        }
+
     }
 
     @Override
@@ -303,5 +310,12 @@ public class BrowseActivity extends AppCompatActivity {
             mRecyclerViewAdapter.notifyDataSetChanged();
 
         }
+    }
+
+    private boolean isNetAvailable() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnected();
     }
 }
