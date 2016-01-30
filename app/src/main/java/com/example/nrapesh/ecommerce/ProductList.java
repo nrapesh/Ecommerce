@@ -3,6 +3,7 @@ package com.example.nrapesh.ecommerce;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -31,7 +32,8 @@ public class ProductList extends AppCompatActivity {
     private String url_all_products = "http://ec2-52-77-246-8.ap-southeast-1.compute.amazonaws.com/get_products.php";
 
 
-    ActionBarDrawerToggle mDrawerToggle;
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
 
 
 
@@ -46,9 +48,9 @@ public class ProductList extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        DrawerLayout drawer= (DrawerLayout) findViewById(R.id.drawerLayout);        // Drawer object Assigned to the view
+        mDrawerLayout= (DrawerLayout) findViewById(R.id.drawerLayout);        // Drawer object Assigned to the view
         mDrawerToggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.drawer_open, R.string.drawer_close){
+                this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close){
 
             @Override
             public void onDrawerOpened(View drawerView) {
@@ -71,7 +73,7 @@ public class ProductList extends AppCompatActivity {
 
 
         }; // Drawer Toggle Object Made
-        drawer.setDrawerListener(mDrawerToggle); // Drawer Listener set to the Drawer toggle
+        mDrawerLayout.setDrawerListener(mDrawerToggle); // Drawer Listener set to the Drawer toggle
         mDrawerToggle.syncState();               // Finally we set the drawer toggle sync State
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
@@ -151,6 +153,15 @@ public class ProductList extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (this.mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            this.mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     ArrayList<Product> results = new ArrayList<Product>();
