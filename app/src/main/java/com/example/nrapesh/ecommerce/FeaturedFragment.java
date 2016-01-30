@@ -1,6 +1,9 @@
 package com.example.nrapesh.ecommerce;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -101,8 +104,12 @@ public class FeaturedFragment extends Fragment {
             }
         });
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-        new LoadAllProducts().execute("");
 
+
+        if (isNetAvailable()) {
+            new LoadAllProducts().execute("");
+        }
+        
         return view;
     }
 
@@ -134,12 +141,13 @@ public class FeaturedFragment extends Fragment {
             // products JSONArray
             JSONArray products = null;
 
-            // Check your log cat for JSON reponse
-            Log.d("All Products: ", json.toString());
 
             try {
                 // Checking for SUCCESS TAG
                 int success = json.getInt(TAG_SUCCESS);
+
+                // Check your log cat for JSON reponse
+                Log.d("All Products: ", json.toString());
 
                 if (success == 1) {
                     // products found
@@ -292,5 +300,12 @@ public class FeaturedFragment extends Fragment {
             progressBar.setVisibility(View.GONE);
 
         }
+    }
+
+    private boolean isNetAvailable() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnected();
     }
 }

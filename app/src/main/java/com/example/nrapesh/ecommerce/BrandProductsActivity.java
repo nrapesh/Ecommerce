@@ -85,6 +85,8 @@ public class BrandProductsActivity extends AppCompatActivity {
                 }
             }
         });
+
+
         new LoadProducts().execute("");
     }
 
