@@ -2,6 +2,7 @@ package com.example.nrapesh.ecommerce;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -12,6 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.facebook.login.LoginManager;
 
 import java.util.ArrayList;
 
@@ -34,7 +37,7 @@ public class ProductList extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
-
+    private NavigationView mNavigationView;
 
 
     @Override
@@ -48,9 +51,11 @@ public class ProductList extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        mDrawerLayout= (DrawerLayout) findViewById(R.id.drawerLayout);        // Drawer object Assigned to the view
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);        // Drawer object Assigned to the view
+        mNavigationView = (NavigationView) findViewById(R.id.navigation);
+        mNavigationView.setNavigationItemSelectedListener(new NavigationItemOnClickListener());
         mDrawerToggle = new ActionBarDrawerToggle(
-                this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close){
+                this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
 
             @Override
             public void onDrawerOpened(View drawerView) {
@@ -69,7 +74,6 @@ public class ProductList extends AppCompatActivity {
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, 0); // this disables the animation
             }
-
 
 
         }; // Drawer Toggle Object Made
@@ -169,5 +173,22 @@ public class ProductList extends AppCompatActivity {
     private ArrayList getListData() {
 
         return results;
+    }
+
+
+    private class NavigationItemOnClickListener implements NavigationView.OnNavigationItemSelectedListener {
+        @Override
+        public boolean onNavigationItemSelected(MenuItem menuItem) {
+            switch (menuItem.getItemId()) {
+                case R.id.logout:
+                    LoginManager.getInstance().logOut();
+                    Intent intent = new Intent(ProductList.this, LauncherActivity.class);
+                    startActivity(intent);
+                    return true;
+
+
+            }
+            return false;
+        }
     }
 }

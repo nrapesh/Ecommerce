@@ -1,11 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="single" android:id="@+id/drawerItems">
         <item
-            android:id="@+id/nav_home"
-            android:title="Item1" />
-        <item
-            android:id="@+id/nav_about"
-            android:title="Item2" />
+            android:id="@+id/logout"
+            android:title="Logout" />
     </group>
 </menu>
