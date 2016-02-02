@@ -80,6 +80,20 @@
         android:clickable="true"
         android:onClick="browse_category"
         android:gravity="center" />
+    <View
+        android:id="@+id/divider5"
+        style="@style/Divider" />
+    <TextView
+        android:id="@+id/browse_empty"
+        android:text=" "
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.1"
+        android:textStyle="bold"
+        android:typeface="sans"
+        android:textSize="25dp"
+        android:clickable="true"
+        android:gravity="center" />
 
     <!--<ListView
         android:id="@+id/browse_categories"
