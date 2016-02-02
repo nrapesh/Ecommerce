@@ -84,8 +84,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ViewHolder> {
                 .load(listData.get(position).getImageUrl())
                 .placeholder(R.drawable.image_placeholder)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .thumbnail(0.1f)
                 .dontTransform()
+                .dontAnimate()
                 .into(holder.imageView);
   }
 
