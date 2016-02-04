@@ -84,7 +84,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:id="@+id/LikeButton"
+                android:id="@+id/likeButton"
                 android:clickable="true">
 
                 <TextView
@@ -97,7 +97,8 @@
                     android:gravity="center"
                     android:text="@string/like"
                     android:textAllCaps="false"
-                    android:textColor="@color/secondaryText" />
+                    android:textColor="@color/secondaryText"
+                    android:id="@+id/likeButtonTextAndImage" />
             </LinearLayout>
 
             <LinearLayout

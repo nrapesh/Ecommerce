@@ -6,6 +6,7 @@
 
     <string name="buy">Buy</string>
     <string name="like">Like</string>
+    <string name="liked">Liked</string>
     <string name="share">Share</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_launcher">LauncherActivity</string>

@@ -28,6 +28,8 @@ public class Product {
     private Bitmap imageBitmap;
     private boolean isOutOfStock;
 
+    private boolean likedProduct;
+
 
     public Product(String id, String name, String brand, String retailer, float price, float discountedPrice, String category,
                    String color, String description, String url, String imageUrl, Bitmap imageBitmap, boolean isOutOfStock) {
@@ -46,6 +48,7 @@ public class Product {
         this.imageUrl = imageUrl;
 
         this.isOutOfStock = isOutOfStock;
+        this.likedProduct = false;
     }
 
 
@@ -128,6 +131,14 @@ public class Product {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public boolean getLikedProduct() {
+        return this.likedProduct;
+    }
+
+    public void setLikedProduct(boolean likedProduct) {
+        this.likedProduct = likedProduct;
     }
 
 

@@ -29,8 +29,10 @@ class ViewHolder extends RecyclerView.ViewHolder {
     TextView discountPriceView;
     TextView retailerView;
     LinearLayout shareButton;
+    LinearLayout likeButton;
+    TextView likeButtonTextAndImage;
 
-    String productUrl;
+    Product product;
 
     protected ViewHolder(View itemLayoutView) {
         super(itemLayoutView);
@@ -40,6 +42,8 @@ class ViewHolder extends RecyclerView.ViewHolder {
         this.discountPriceView = (TextView) itemLayoutView.findViewById(R.id.discountPrice);
         this.retailerView = (TextView) itemLayoutView.findViewById(R.id.retailer);
         this.shareButton = (LinearLayout) itemLayoutView.findViewById(R.id.shareButton);
+        this.likeButton = (LinearLayout) itemLayoutView.findViewById(R.id.likeButton);
+        this.likeButtonTextAndImage = (TextView) itemLayoutView.findViewById(R.id.likeButtonTextAndImage);
     }
 
 }
@@ -60,6 +64,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ViewHolder> {
         View view = inflater.inflate(R.layout.basic_product_info, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
         addShareButtonListener(viewHolder);
+        addLikeButtonListener(viewHolder);
         return viewHolder;
     }
 
@@ -86,8 +91,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ViewHolder> {
         String retailerString = listData.get(position).getRetailer().toUpperCase() + ", USA";
         holder.retailerView.setText(retailerString);
 
-        holder.productUrl = listData.get(position).getUrl();
-
+        holder.product = listData.get(position);
 
         Glide.with(context)
                 .load(listData.get(position).getImageUrl())
@@ -111,10 +115,30 @@ public class ProductListAdapter extends RecyclerView.Adapter<ViewHolder> {
                 Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
 
-                shareIntent.putExtra(Intent.EXTRA_TEXT, viewHolder.productUrl);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, viewHolder.product.getUrl());
                 //start the chooser for sharing
                 context.startActivity(Intent.createChooser(shareIntent, "Share"));
 
+            }
+        });
+    }
+
+    private void addLikeButtonListener(final ViewHolder viewHolder) {
+        viewHolder.likeButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (viewHolder.product.getLikedProduct()) {
+                    viewHolder.product.setLikedProduct(false);
+                    viewHolder.likeButtonTextAndImage.setText(R.string.like);
+                    viewHolder.likeButtonTextAndImage.setCompoundDrawablesWithIntrinsicBounds(
+                            R.drawable.ic_favorite_outline, 0, 0, 0);
+                } else {
+                    viewHolder.product.setLikedProduct(true);
+                    viewHolder.likeButtonTextAndImage.setText(R.string.liked);
+                    viewHolder.likeButtonTextAndImage.setCompoundDrawablesWithIntrinsicBounds(
+                            R.drawable.ic_favorite, 0, 0, 0 );
+
+                }
             }
         });
 
