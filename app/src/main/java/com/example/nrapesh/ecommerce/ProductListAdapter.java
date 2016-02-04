@@ -70,6 +70,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        Product product = listData.get(position);
         String brand = listData.get(position).getBrand();
         String name = listData.get(position).getName();
 
@@ -92,6 +93,16 @@ public class ProductListAdapter extends RecyclerView.Adapter<ViewHolder> {
         holder.retailerView.setText(retailerString);
 
         holder.product = listData.get(position);
+
+        if (product.getLikedProduct()) {
+            holder.likeButtonTextAndImage.setText(R.string.liked);
+            holder.likeButtonTextAndImage.setCompoundDrawablesWithIntrinsicBounds(
+                    R.drawable.ic_favorite, 0, 0, 0);
+        } else {
+            holder.likeButtonTextAndImage.setText(R.string.like);
+            holder.likeButtonTextAndImage.setCompoundDrawablesWithIntrinsicBounds(
+                    R.drawable.ic_favorite_outline, 0, 0, 0);
+        }
 
         Glide.with(context)
                 .load(listData.get(position).getImageUrl())
@@ -136,8 +147,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ViewHolder> {
                     viewHolder.product.setLikedProduct(true);
                     viewHolder.likeButtonTextAndImage.setText(R.string.liked);
                     viewHolder.likeButtonTextAndImage.setCompoundDrawablesWithIntrinsicBounds(
-                            R.drawable.ic_favorite, 0, 0, 0 );
-
+                            R.drawable.ic_favorite, 0, 0, 0);
                 }
             }
         });
