@@ -53,6 +53,7 @@ public class BrandSelectionActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle("SELECT BRAND");
 //        TextView v = (TextView) toolbar.findViewById(R.id.toolbar_title);
 //        v.setGravity(Gravity.LEFT | Gravity.CENTER);
 //        v.setText("SELECT BRAND");

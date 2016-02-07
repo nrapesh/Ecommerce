@@ -66,7 +66,7 @@ public class BrowseActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-                Bundle b = getIntent().getExtras();
+        Bundle b = getIntent().getExtras();
         category = b.getInt("category");
 //        TextView v = (TextView) toolbar.findViewById(R.id.toolbar_title);
 //        v.setGravity(Gravity.LEFT | Gravity.CENTER);
