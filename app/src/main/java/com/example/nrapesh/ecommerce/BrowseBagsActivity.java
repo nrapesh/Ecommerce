@@ -11,7 +11,7 @@ public class BrowseBagsActivity extends BrowseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("BAGS");
+        actionBar.setTitle("Bags");
 
     }
 

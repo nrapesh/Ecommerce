@@ -12,7 +12,7 @@ public class BrowseClothingActivity extends BrowseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("CLOTHES");
+        actionBar.setTitle("Clothes");
 
     }
 

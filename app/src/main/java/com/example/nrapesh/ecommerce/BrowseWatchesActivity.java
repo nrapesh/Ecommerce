@@ -12,7 +12,7 @@ public class BrowseWatchesActivity extends BrowseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("WATCHES");
+        actionBar.setTitle("Watches");
 
     }
 
