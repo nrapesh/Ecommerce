@@ -14,7 +14,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
+import com.facebook.login.widget.ProfilePictureView;
 
 import java.util.ArrayList;
 
@@ -38,12 +40,13 @@ public class ProductList extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private NavigationView mNavigationView;
+    private ProfilePictureView mUserProfilePicture;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_product_list);
 
         // Set a toolbar to replace the action bar.
@@ -53,6 +56,7 @@ public class ProductList extends AppCompatActivity {
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);        // Drawer object Assigned to the view
         mNavigationView = (NavigationView) findViewById(R.id.navigation);
+        mUserProfilePicture = (ProfilePictureView) findViewById(R.id.userProfilePicture);
         mNavigationView.setNavigationItemSelectedListener(new NavigationItemOnClickListener());
         mDrawerToggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
