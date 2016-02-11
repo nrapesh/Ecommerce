@@ -2,6 +2,7 @@ package com.example.nrapesh.ecommerce;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -18,6 +19,7 @@ import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
@@ -87,7 +89,7 @@ public class LauncherActivity extends AppCompatActivity {
         // If the access token is available already assign it.
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         if (accessToken != null) {
-            startProductListActivity();
+            startProductListActivity(null /* userId */);
         }
 
         LoginButton facebookButton = (LoginButton) findViewById(R.id.facebook_login_button);
@@ -108,7 +110,12 @@ public class LauncherActivity extends AppCompatActivity {
                                     GraphResponse response) {
                                 // Application code
                                 Log.v("LoginActivity", response.toString());
-                                startProductListActivity();
+                                JSONObject responseObject = response.getJSONObject();
+                                try {
+                                    startProductListActivity(responseObject.getString("id"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         });
                 Bundle parameters = new Bundle();
@@ -130,8 +137,11 @@ public class LauncherActivity extends AppCompatActivity {
         });
     }
 
-    private void startProductListActivity() {
+    private void startProductListActivity(@Nullable String userId) {
         final Intent intent = new Intent(this, ProductList.class);
+        if (userId != null) {
+            intent.putExtra(ProductList.USER_ID, userId);
+        }
         startActivity(intent);
 
     }

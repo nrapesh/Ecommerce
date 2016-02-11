@@ -22,6 +22,8 @@ import java.util.ArrayList;
 
 public class ProductList extends AppCompatActivity {
 
+    public static final String USER_ID = "userId";
+
     // JSON Node names
     private static String TAG_SUCCESS = "success";
     private static String TAG_PRODUCTS = "product";
@@ -56,7 +58,6 @@ public class ProductList extends AppCompatActivity {
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);        // Drawer object Assigned to the view
         mNavigationView = (NavigationView) findViewById(R.id.navigation);
-        mUserProfilePicture = (ProfilePictureView) findViewById(R.id.userProfilePicture);
         mNavigationView.setNavigationItemSelectedListener(new NavigationItemOnClickListener());
         mDrawerToggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
@@ -83,6 +84,12 @@ public class ProductList extends AppCompatActivity {
         }; // Drawer Toggle Object Made
         mDrawerLayout.setDrawerListener(mDrawerToggle); // Drawer Listener set to the Drawer toggle
         mDrawerToggle.syncState();               // Finally we set the drawer toggle sync State
+
+        mUserProfilePicture = (ProfilePictureView) findViewById(R.id.userProfilePicture);
+        String fbUserId = getIntent().getStringExtra(USER_ID);
+        if (fbUserId != null) {
+            mUserProfilePicture.setProfileId(fbUserId);
+        }
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
